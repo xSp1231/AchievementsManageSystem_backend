@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/infomanagesystem?serverTimezone=UTC
+      username: root
+      password: root123
+  servlet:     #
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto   #??id??
