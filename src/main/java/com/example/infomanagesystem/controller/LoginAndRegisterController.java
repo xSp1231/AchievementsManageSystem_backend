@@ -25,9 +25,9 @@ public class LoginAndRegisterController {
           if(role.equals("学生")){//是学生
               if(studentService.login(username,password)!=null){//用户存在
                   if(studentService.checkStatus(username)==0){
-                      return new R(true,404,"该账号不能使用","登录失败");
+                      return new R(false,404,"该账号不能使用,请联系管理员","登录失败");
                   }
-                  //能使用status==1
+                  //账号能使用  status==1
                   String token=JwtUtils.generateToken(username,role);
                   return new R(true,200,"学生用户存在",token,"登录成功");
               }
@@ -35,7 +35,6 @@ public class LoginAndRegisterController {
                   return new R(false,404,"学生用户不存在!请检查用户名或者密码是否正确");
               }
           }
-
           else{ //管理员
               if(managerService.login(username,password)!=null){
                   String token=JwtUtils.generateToken(username,role);
@@ -84,10 +83,5 @@ public class LoginAndRegisterController {
             }
 
         }
-
-
-
-
-
     }
 }
