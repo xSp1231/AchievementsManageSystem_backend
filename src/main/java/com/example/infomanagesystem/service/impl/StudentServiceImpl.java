@@ -5,18 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.infomanagesystem.entity.Manager;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.mapper.StudentMapper;
 import com.example.infomanagesystem.service.StudentService;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.awt.print.Book;
 import java.util.List;
-import java.util.Objects;
 
 //学生登录 注册
 
@@ -49,6 +44,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username);
         return studentMapper.selectOne(q).getStatus();//返回状态码
+    }
+
+    @Override
+    public List<Student> getAll() {
+        return studentMapper.selectList(null);
     }
 
 
@@ -86,16 +86,41 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     }
 
     @Override
+    public Student selectStudentByUsername(String username) {
+        QueryWrapper<Student> q=new QueryWrapper<>();
+        q.eq("username",username); //编辑学生信息的时候 先要根据username 搜寻用户
+        return studentMapper.selectOne(q);
+    }
+
+    @Override
     public IPage<Student> getPage(int currentPage, int pageSize,Student student) { //里面写查询条件
         LambdaQueryWrapper<Student> q = new LambdaQueryWrapper<>();
+        //模糊查询查的是字串 而不是子序列  xs 可以查到xsp sp可以查到xsp  但是xp查不到xsp
         //用户名 major status name  如果前端传递的查询字符串不为空，则在 Student 实体的 username 属性中查找包含该字符串的记录。如果前端没有传递查询字符串，则不添加该查询条件。
         q.like(Strings.isNotEmpty(student.getUsername()), Student::getUsername, student.getUsername());//student.getUsername()包含于Student::getUsername
         q.like(Strings.isNotEmpty(student.getMajor()), Student::getMajor, student.getMajor());
         q.like(Strings.isNotEmpty(student.getName()), Student::getName, student.getName());
-        q.eq(student.getStatus() ==1||student.getStatus()==0, Student::getStatus, student.getStatus());
+      //  q.eq(student.getStatus() ==1||student.getStatus()==0, Student::getStatus, student.getStatus());
         IPage page = new Page(currentPage, pageSize);
         studentMapper.selectPage(page, q); //分页查询条件
         return page;
 
+    }
+
+    @Override
+    public void deleteUsers(List<String> usernames) {
+        QueryWrapper<Student> q=new QueryWrapper<>();
+        q.in("username",usernames);
+        //remove 方法是 IService 接口中定义的方法，实现了该接口的服务类可以直接使用该方法。
+        //remove 方法可以删除符合条件的一组对象，也可以删除单个对象。
+        //具体来说，如果传入的参数是一个对象，则会删除这个对象；如果传入的参数是一个查询条件对象，则会删除符合条件的所有对象。
+        remove(q);
+    }
+
+    @Override
+    public List<Student> getByUsernames(List<String> usernames) {
+        QueryWrapper<Student> q=new QueryWrapper<>();
+        q.in("username",usernames);
+        return studentMapper.selectList(q);
     }
 }

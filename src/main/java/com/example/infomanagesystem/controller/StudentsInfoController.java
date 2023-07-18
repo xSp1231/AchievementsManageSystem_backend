@@ -1,10 +1,23 @@
 package com.example.infomanagesystem.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.read.metadata.ReadSheet;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.result.R;
 import com.example.infomanagesystem.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
 
 /**
  * @Author xushupeng
@@ -14,19 +27,28 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin  //跨域
 public class StudentsInfoController {
-
     @Autowired
     private StudentService studentService;
+    @GetMapping("/getAll")
+    public R getAll(){
+        List<Student> studentList=studentService.getAll();
+        return new R(true ,200,"所有学生",studentList);
+    }
 
-    @GetMapping("/{currentPage}/{pageSize}") //http://localhost:8080/2/3
-    public R getPage(@PathVariable int currentPage,@PathVariable int pageSize,@RequestBody Student student){
+    @GetMapping("student/{currentPage}/{pageSize}") //http://localhost:8080/2/3
+    public R getPage(@PathVariable int currentPage,@PathVariable int pageSize, Student student){
         System.out.println("分页查询中的student is"+student);
       return new R(true,200,"分页信息",studentService.getPage(currentPage,pageSize,student));
+    }
+    @GetMapping("/selectStudentByUsername/{username}")
+    public R selectStudentByUsername(@PathVariable String username){
+        System.out.println("按照姓名搜索用户的username is "+username);
+        return new R(true,200,"用户已找到",studentService.selectStudentByUsername(username));
     }
 
     @PostMapping("/student") //管理员添加学生
     public R addStudent(@RequestBody Student student){
-        if(studentService.saveStudent(student)){
+        if(studentService.saveStudent(student)){ //前端传过来的数据必须全面
             return new R(true,201,"学生用户创建成功");
         }
         else{
@@ -43,10 +65,17 @@ public class StudentsInfoController {
            return  new R(false,404,"学生"+username+"删除失败!");
        }
     }
+
+    //批量删除学生信息
+    @PostMapping("/deleteUsersByUsernames")
+    public R deleteUsersByUsernames(@RequestBody List<String> usernames){
+        System.out.println("前端传过来的usernames is "+usernames);
+        studentService.deleteUsers(usernames);
+        return new R(true,204,"批量删除成功");
+    }
     //修改学生信息
     @PutMapping("/student")
     public R updateStudent(@RequestBody Student student){
-
         //用户名 角色 不能修改
         if(studentService.updateStudent(student)){
             return new R(true,200,"修改学生信息成功");
@@ -56,4 +85,67 @@ public class StudentsInfoController {
         }
     }
 
+    //excel文件导入接口 基于easyExcel
+
+    @PostMapping("/importStudentInfo")
+    public R importData(@RequestParam("file") MultipartFile file) throws IOException {
+        // 使用EasyExcel读取Excel文件 //输入流读取数据
+        ExcelReader excelReader = EasyExcel.read(file.getInputStream(), Student.class, new StudentListener()).build();
+        ReadSheet readSheet = EasyExcel.readSheet(0).build();
+        excelReader.read(readSheet);
+        excelReader.finish();
+        return new R(true,200,"数据导入成功(用户名重复数据将自动排除)");
+    }
+    //监听器
+    private class StudentListener extends AnalysisEventListener<Student> {
+        @Override
+        public void invoke(Student student, AnalysisContext analysisContext) {
+            // 读取到一条数据时的回调 //子类继承父类并重写父类中的方法时，返回类型必须是父类方法返回类型的子类型或相同类型
+            System.out.println("读取一行"+student);
+            boolean add=studentService.saveStudent(student); //插入数据库  如果存在 就不添加
+        }
+        @Override
+        public void doAfterAllAnalysed(AnalysisContext analysisContext) {
+            // 读取完成时的回调
+            System.out.println("excel文件读取完成");
+        }
+    }
+
+    @GetMapping("/exportAll")
+    public void exportData(HttpServletResponse response) throws IOException {
+
+        // 设置响应头
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=StudentInfo.xlsx");
+        // 查询数据库中的数据
+        List<Student> userList = studentService.getAll(); //获取所有学生
+        //创建 ExcelWriter 对象  输出流 // 输出流 向文件中写入
+        OutputStream out = response.getOutputStream();
+        ExcelWriter excelWriter = EasyExcel.write(out, Student.class).build();
+
+        // 创建 Sheet 对象
+        WriteSheet writeSheet = EasyExcel.writerSheet("Sheet0").build();
+
+        // 写入数据
+        excelWriter.write(userList, writeSheet);
+        // 关闭 ExcelWriter 对象
+        excelWriter.finish();
+    }
+
+    //根据用户名 实现批量导出
+    @PostMapping("/exportByUsername")
+    public void exportAll(@RequestBody List<String> usernames ,HttpServletResponse response) throws IOException { //apifox 直接json传递一个数组 ["username1","username2","username3"]
+        List<Student> studentList =studentService.getByUsernames(usernames);
+        System.out.println("接受到的列表数据"+studentList);
+        // 导出数据到 Excel 文件并写入响应体
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=StudentInfo.xlsx");
+        OutputStream outputStream = response.getOutputStream();
+        ExcelWriter excelWriter = EasyExcel.write(outputStream, Student.class).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet("Sheet0").build();
+        excelWriter.write(studentList, writeSheet);
+        excelWriter.finish();
+        outputStream.flush();
+    }
 }
