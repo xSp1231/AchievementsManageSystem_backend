@@ -39,6 +39,9 @@ public class R {
         this.code = code;
         this.data = data;
     }
-
+    public R(boolean flag, String message) {
+        this.flag = flag;
+        this.message=message;
+    }
 
 }
