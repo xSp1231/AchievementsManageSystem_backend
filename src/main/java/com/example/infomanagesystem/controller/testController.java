@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @Author xushupeng
@@ -26,13 +27,15 @@ public class testController {
         if(file.isEmpty()){
             return new R(false,400,"文件为空");
         }
-        String OriginalFilename=file.getOriginalFilename();
+        String OriginalFilename=file.getOriginalFilename();//获取原始文件名
+        //System.out.println("原始文件名是"+OriginalFilename); //xxx.png  xxx.jpg
         //使用时间戳 防止文件重名 构造文件名 hello.png
         String fileName=System.currentTimeMillis()+"."+OriginalFilename.substring(OriginalFilename.lastIndexOf(".")+1); //获取最后一个字符为”.“的下标再+1 之后字符串截取
-        System.out.println("得到的filename is "+fileName);
+        //另外一种命名方式  String fileName=OriginalFilename.substring(0,OriginalFilename.lastIndexOf('.'))+ UUID.randomUUID().toString()+OriginalFilename.substring(OriginalFilename.lastIndexOf('.'));
+        System.out.println("得到的filename is "+fileName);//类似于
         String path="C:\\Users\\86187\\Desktop\\testimgs\\"; //设置图片的保存位置
         File dest=new File(path+fileName);//根据路径创建一个新的文件对象
-        if(!dest.getParentFile().exists()){
+        if(!dest.getParentFile().exists()){ //判断父目录是否存在  即path 是否存在
             dest.mkdirs();
         }
         try {
@@ -40,7 +43,7 @@ public class testController {
               return new R(true,200,"图片上床成功",path+fileName);
         } catch (IOException e) {
             e.printStackTrace();
-            return new R(false,400,"图片上传失败");
+              return new R(false,400,"图片上传失败");
         }
     }
 
