@@ -3,8 +3,12 @@ package com.example.infomanagesystem.controller;
 import com.example.infomanagesystem.entity.Notice;
 import com.example.infomanagesystem.result.R;
 import com.example.infomanagesystem.service.NoticeService;
+import com.example.infomanagesystem.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 
@@ -60,7 +64,10 @@ public class NoticeController {
             return new R(false,400,"notice修改失败");
         }
     }
-
-
+    //上传图片到阿里云
+    @PostMapping("/uploadToOss")
+    public R uploadToOss(@RequestParam(value = "file",required = false) MultipartFile file) throws IOException {
+        return new R(true,200, UploadUtil.uploadImage(file),"存储到阿里云Oss");
+    }
 
 }

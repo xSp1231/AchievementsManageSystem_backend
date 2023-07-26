@@ -19,7 +19,7 @@ public interface StudentService extends IService<Student> {
      boolean deleteStudentByUsername(String username);//学生信息的删除 注销 (管理员 学生)
 
      boolean updateStudent(Student student); //学生信息的修改 (管理员 学生)
-
+     boolean editStudent(Student student) ;//通过id修改学生信息
      Student selectStudentByUsername(String username);
 
      IPage<Student> getPage(int currentPage, int pageSize,Student student); //当前所在页 每页多少条(管理员)

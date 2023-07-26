@@ -10,10 +10,12 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.result.R;
 import com.example.infomanagesystem.service.StudentService;
+import com.example.infomanagesystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,6 +48,23 @@ public class StudentsInfoController {
         return new R(true,200,"用户已找到",studentService.selectStudentByUsername(username));
     }
 
+    @GetMapping("/getUserInfo")   //学生修改个人信息的时候 先要获取该学生的信息 前端携带token
+    public R getUserInfo(HttpServletRequest request){
+        // 获取 Authorization 头部的值
+        String token = request.getHeader("Authorization").substring(7);
+        if(JwtUtils.validateToken(token)){
+            System.out.println("jwt正确");
+            String username=JwtUtils.getUsernameFromToken(token);
+            String role=JwtUtils.getRoleFromToken(token);
+            System.out.println(" jwt  username "+username);
+            System.out.println(" jwt  role "+role);
+            return new R(true,200,"获得登录者信息",studentService.selectStudentByUsername(username));
+        }
+        else{
+            System.out.println("jwt过期或错误");
+            return new R(false,400,"jwt过期或错误");
+        }
+    }
     @PostMapping("/student") //管理员添加学生
     public R addStudent(@RequestBody Student student){
         if(studentService.saveStudent(student)){ //前端传过来的数据必须全面
@@ -83,6 +102,17 @@ public class StudentsInfoController {
         else{
             return new R(false,403,"修改学生信息失败");
         }
+    }
+
+    @PostMapping("/editStudentInfo") //修改学生信息 不包含密码
+    public R edidStudentInfo(@RequestBody Student student){
+        if(studentService.editStudent(student)){
+            return new R(true,"修改成功");
+        }
+        else{
+            return new R(true,"修改成功");
+        }
+
     }
 
     //excel文件导入接口 基于easyExcel

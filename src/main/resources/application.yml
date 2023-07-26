@@ -17,3 +17,5 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto   #??id??
+  configuration:
+    map-underscore-to-camel-case: false  #允许驼峰

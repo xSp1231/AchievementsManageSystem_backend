@@ -19,12 +19,30 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject(username)
-                .setSubject(role)
+                .claim("role",role)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
+    public static String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public static String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return (String) claims.get("role");
+    }
+
 
     public static String getSubjectFromToken(String token) { //getSubjectFromToken 方法用于从 JWT 中获取 subject，即用户名等信息
         Claims claims = Jwts.parser()

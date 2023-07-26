@@ -50,8 +50,6 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public List<Student> getAll() {
         return studentMapper.selectList(null);
     }
-
-
     @Override
     public boolean saveStudent(Student student) { //学生添加 不能使得用户名重复
         String username=student.getUsername();
@@ -61,7 +59,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             return false;
         }
         else{
-        return studentMapper.insert(student)>0;
+        return studentMapper.insert(student)>0; //添加学生
         }
     }
 
@@ -86,9 +84,15 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     }
 
     @Override
+    public boolean editStudent(Student student) {
+        return studentMapper.updateById(student)>0;
+    }
+
+    @Override
     public Student selectStudentByUsername(String username) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username); //编辑学生信息的时候 先要根据username 搜寻用户
+        System.out.println("得到的学生信息"+studentMapper.selectOne(q));
         return studentMapper.selectOne(q);
     }
 

@@ -48,7 +48,7 @@ public class testController {
     }
 
     //文件上传到阿里云
-    @PostMapping("/uploadToOss")
+    @PostMapping("/uploadToOssTest")
     public R uploadToOss(@RequestParam(value = "file",required = false) MultipartFile file) throws IOException{
         return new R(true,200, UploadUtil.uploadImage(file),"存储到阿里云Oss");
     }
