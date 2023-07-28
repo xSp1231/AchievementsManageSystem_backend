@@ -20,6 +20,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false  #允许驼峰
 
+
 sa-token:
   # token 名称（同时也是 cookie 名称）
   token-name: satoken

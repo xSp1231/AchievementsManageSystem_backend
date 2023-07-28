@@ -2,6 +2,7 @@ package com.example.infomanagesystem.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -57,21 +58,10 @@ public class StudentsInfoController {
 
     @SaCheckLogin
     @GetMapping("/getUserInfo")   //个人中心页面 学生修改个人信息的时候 先要获取该学生的信息 前端携带token
-    public R getUserInfo(HttpServletRequest request){
-        // 获取 Authorization 头部的值
-        String token = request.getHeader("Authorization").substring(7);
-        if(JwtUtils.validateToken(token)){
-            System.out.println("jwt正确");
-            String username=JwtUtils.getUsernameFromToken(token);
-            String role=JwtUtils.getRoleFromToken(token);
-            System.out.println(" jwt  username "+username);
-            System.out.println(" jwt  role "+role);
-            return new R(true,200,"获得登录者信息",studentService.selectStudentByUsername(username));
-        }
-        else{
-            System.out.println("jwt过期或错误");
-            return new R(false,400,"jwt过期或错误");
-        }
+    public R getUserInfo(){
+        System.out.println("个人信息会话号码(账号)"+ StpUtil.getLoginId());
+        String username= (String) StpUtil.getLoginId();
+     return new R(true,200,"登录者的用户信息已经获得",studentService.selectStudentByUsername(username));
     }
     @SaCheckLogin
     @SaCheckRole("admin")
