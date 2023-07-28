@@ -14,6 +14,19 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     @Autowired
     private ManagerMapper managerMapper;
 
+    @Override
+    public String getRoleByUsername(String username) {
+        QueryWrapper<Manager> q=new QueryWrapper<>();
+        q.eq("username",username);
+        Manager t=managerMapper.selectOne(q);
+        if (t!=null){
+            return t.getRole();
+        }
+        else{
+            return "";
+        }
+    }
+
     //管理员登录
     @Override
     public Manager login(String username, String password) {

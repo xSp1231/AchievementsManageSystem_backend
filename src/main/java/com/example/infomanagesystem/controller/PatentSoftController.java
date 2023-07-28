@@ -1,5 +1,7 @@
 package com.example.infomanagesystem.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -34,19 +36,23 @@ public class PatentSoftController {
     @Autowired
     private PatentSoftService patentSoftService;
 
+    @SaCheckLogin
+    @SaCheckRole("admin")
     @GetMapping("/getAll")
     public R getAll(){
         List<PatentSoft> patentSoftList=patentSoftService.getAllPatentSoft();
         return new R(true ,200,"所有专利软著",patentSoftList);
     }
-    //分页+条件查询
+
+    @SaCheckLogin //分页+条件查询
     @GetMapping("/{currentPage}/{pageSize}") //http://localhost:8080/PatentSoft/2/3
     public R getPage(@PathVariable int currentPage, @PathVariable int pageSize, PatentSoft patentSoft){
         System.out.println("分页查询中的patentSoft is"+patentSoft);
         return new R(true,200,"分页信息",patentSoftService.getPage(currentPage,pageSize,patentSoft));
     }
 
-    @GetMapping("/getUserInfo")   //学生修改个人成果信息的时候 先要获取该学生的信息 前端携带token
+    @SaCheckLogin
+    @GetMapping("/getUserInfo")   //没有使用该方法  学生修改个人成果信息的时候 先要获取该学生的信息 前端携带token
     public R getUserInfo(HttpServletRequest request){
         // 获取 Authorization 头部的值
         String token = request.getHeader("Authorization").substring(7);
@@ -64,6 +70,7 @@ public class PatentSoftController {
         }
     }
     //获取编辑时的成果信息
+    @SaCheckLogin
     @GetMapping("getPatentSoftById/{id}")
     public R getPatentSoftById(@PathVariable Integer id){
         PatentSoft temp=patentSoftService.getPatentSoftById(id);
@@ -77,6 +84,7 @@ public class PatentSoftController {
 
 
     //管理员 学生 添加信息
+    @SaCheckLogin
     @PostMapping("/add")
     public R addPatentSoft(@RequestBody PatentSoft patentSoft) {
         if (patentSoftService.savePatentSoft(patentSoft)) { //前端传过来的数据必须全面
@@ -87,6 +95,7 @@ public class PatentSoftController {
         }
     }
     //根据id删除单个
+    @SaCheckLogin
     @PostMapping("/deleteOne/{id}")
     public R deleteOne(@PathVariable Integer id){
         if(patentSoftService.deletePatentSoft(id)){
@@ -96,6 +105,7 @@ public class PatentSoftController {
             return new R(false,400,"删除专利/软著成果信息成果失败!");
         }
     }
+    @SaCheckLogin
     @PostMapping("/deleteBatch")
     public R deleteBatch(@RequestBody List<Integer> ids){
         System.out.println("前端传过来的ids is "+ids);
@@ -104,6 +114,7 @@ public class PatentSoftController {
         return new R(true,204,"批量删除成功");
     }
     //修改专著的信息
+    @SaCheckLogin
     @PostMapping("/update")
     public R updatePatentSoft(@RequestBody PatentSoft patentSoft){
         //用户名 角色 不能修改
@@ -141,6 +152,7 @@ public class PatentSoftController {
     }
 
     //导出全部所有的科技论文信息
+
     @GetMapping("/exportAll")
     public void exportData(HttpServletResponse response) throws IOException {
 
@@ -164,6 +176,8 @@ public class PatentSoftController {
     }
 
     //根据id 导出所选的数据
+    @SaCheckLogin
+    @SaCheckRole("admin")
     @PostMapping("/exportByIds")
     public void exportAll(@RequestBody List<Integer> ids ,HttpServletResponse response) throws IOException { //apifox 直接json传递一个数组 ["username1","username2","username3"]
         List<PatentSoft> patentSoftList =patentSoftService.getByids(ids);

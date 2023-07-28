@@ -1,5 +1,7 @@
 package com.example.infomanagesystem.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -33,19 +35,24 @@ public class ScientificPaperController {
     @Autowired
     private ScientificPaperService scientificPaperService;
 
+    @SaCheckLogin
+    @SaCheckRole("admin")
     @GetMapping("/getAll")
     public R getAll(){
         List<ScientificPaper> scientificPaperList=scientificPaperService.getAllScientificPaper();
         return new R(true ,200,"所有科技论文",scientificPaperList);
     }
     //分页+条件查询
+
+    @SaCheckLogin
     @GetMapping("/{currentPage}/{pageSize}") //http://localhost:8080/ScientificPaper/2/3
     public R getPage(@PathVariable int currentPage,@PathVariable int pageSize, ScientificPaper scientificPaper){
         System.out.println("分页查询中的student is"+scientificPaper);
         return new R(true,200,"分页信息",scientificPaperService.getPage(currentPage,pageSize,scientificPaper));
     }
 
-    @GetMapping("/getUserInfo")   //学生修改个人信息的时候 先要获取该学生的信息 前端携带token
+    @SaCheckLogin
+    @GetMapping("/getUserInfo")   //没有使用  学生修改个人信息的时候 先要获取该学生的信息 前端携带token
     public R getUserInfo(HttpServletRequest request){
         // 获取 Authorization 头部的值
         String token = request.getHeader("Authorization").substring(7);
@@ -63,6 +70,7 @@ public class ScientificPaperController {
         }
     }
     //获取编辑时的成果信息
+    @SaCheckLogin
     @GetMapping("getScientificPaperById/{id}")
     public R getScientificPaperById(@PathVariable Integer id){
         ScientificPaper temp=scientificPaperService.getScientificPaperById(id);
@@ -76,6 +84,7 @@ public class ScientificPaperController {
 
 
     //管理员 学生 添加信息
+    @SaCheckLogin
     @PostMapping("/add")
     public R addScientificPaper(@RequestBody ScientificPaper scientificPaper) {
         if (scientificPaperService.saveScientificPaper(scientificPaper)) { //前端传过来的数据必须全面
@@ -86,6 +95,7 @@ public class ScientificPaperController {
         }
     }
     //根据id删除单个
+    @SaCheckLogin
     @PostMapping("/deleteOne/{id}")
     public R deleteOne(@PathVariable Integer id){
       if(scientificPaperService.deleteScientificPaper(id)){
@@ -95,6 +105,7 @@ public class ScientificPaperController {
           return new R(false,400,"删除科技论文成果信息成果失败!");
       }
     }
+    @SaCheckLogin
     @PostMapping("/deleteBatch")
     public R deleteBatch(@RequestBody List<Integer> ids){
         System.out.println("前端传过来的ids is "+ids);
@@ -103,6 +114,7 @@ public class ScientificPaperController {
         return new R(true,204,"批量删除成功");
     }
     //修改科技论文的信息
+    @SaCheckLogin
     @PostMapping("/update")
     public R updateStudent(@RequestBody ScientificPaper scientificPaper){
         //用户名 角色 不能修改
@@ -115,6 +127,7 @@ public class ScientificPaperController {
     }
 
     //导入excel文件
+
     @PostMapping("/importData")
     public R importData(@RequestParam("file") MultipartFile file) throws IOException {
         // 使用EasyExcel读取Excel文件 //输入流读取数据
@@ -140,6 +153,7 @@ public class ScientificPaperController {
     }
 
     //导出全部所有的科技论文信息
+
     @GetMapping("/exportAll")
     public void exportData(HttpServletResponse response) throws IOException {
 
@@ -163,6 +177,8 @@ public class ScientificPaperController {
     }
 
     //根据id 导出所选的数据
+    @SaCheckLogin
+    @SaCheckRole("admin")
     @PostMapping("/exportByIds")
     public void exportAll(@RequestBody List<Integer> ids ,HttpServletResponse response) throws IOException { //apifox 直接json传递一个数组 ["username1","username2","username3"]
         List<ScientificPaper> scientificPaperList =scientificPaperService.getByids(ids);

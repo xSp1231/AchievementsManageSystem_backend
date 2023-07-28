@@ -1,5 +1,7 @@
 package com.example.infomanagesystem.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -31,24 +33,30 @@ import java.util.List;
 public class StudentsInfoController {
     @Autowired
     private StudentService studentService;
-    @GetMapping("/getAll")
+    @SaCheckLogin
+    @SaCheckRole("admin")
+    @GetMapping("/getAll") //得到所有学生信息
     public R getAll(){
         List<Student> studentList=studentService.getAll();
         return new R(true ,200,"所有学生",studentList);
     }
-
+    @SaCheckLogin
     @GetMapping("student/{currentPage}/{pageSize}") //http://localhost:8080/2/3
     public R getPage(@PathVariable int currentPage,@PathVariable int pageSize, Student student){
         System.out.println("分页查询中的student is"+student);
       return new R(true,200,"分页信息",studentService.getPage(currentPage,pageSize,student));
     }
+
+    @SaCheckLogin   // 用户页面  编辑个人信息的时候 要先找到信息使用
     @GetMapping("/selectStudentByUsername/{username}")
     public R selectStudentByUsername(@PathVariable String username){
         System.out.println("按照姓名搜索用户的username is "+username);
         return new R(true,200,"用户已找到",studentService.selectStudentByUsername(username));
     }
 
-    @GetMapping("/getUserInfo")   //学生修改个人信息的时候 先要获取该学生的信息 前端携带token
+
+    @SaCheckLogin
+    @GetMapping("/getUserInfo")   //个人中心页面 学生修改个人信息的时候 先要获取该学生的信息 前端携带token
     public R getUserInfo(HttpServletRequest request){
         // 获取 Authorization 头部的值
         String token = request.getHeader("Authorization").substring(7);
@@ -65,6 +73,8 @@ public class StudentsInfoController {
             return new R(false,400,"jwt过期或错误");
         }
     }
+    @SaCheckLogin
+    @SaCheckRole("admin")
     @PostMapping("/student") //管理员添加学生
     public R addStudent(@RequestBody Student student){
         if(studentService.saveStudent(student)){ //前端传过来的数据必须全面
@@ -74,7 +84,9 @@ public class StudentsInfoController {
             return new R(false,409,"该学生用户已存在,用户名唯一");//409 Conflict：表示请求与服务器上现有的资源冲突，例如请求创建一个已经存在的资源。
         }
     }
-    @DeleteMapping("/student/{username}") //管理员通过用户名删除 //http://localhost:8080/student/test6
+
+    @SaCheckLogin
+    @DeleteMapping("/student/{username}") //个人中心页面学生注销  用户页面管理员通过用户名删除 //http://localhost:8080/student/test6
     public R deleteStudent(@PathVariable String username){ // @RequestParam 是针对于前端param进行传参
         System.out.println("username is "+username);       // @PathVarible  是针对于在url上面进行传参  url拼接
        if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
@@ -85,6 +97,9 @@ public class StudentsInfoController {
        }
     }
 
+
+    @SaCheckLogin
+    @SaCheckRole("admin")
     //批量删除学生信息
     @PostMapping("/deleteUsersByUsernames")
     public R deleteUsersByUsernames(@RequestBody List<String> usernames){
@@ -92,7 +107,8 @@ public class StudentsInfoController {
         studentService.deleteUsers(usernames);
         return new R(true,204,"批量删除成功");
     }
-    //修改学生信息
+    //管理员用户管理页面修改学生信息
+    @SaCheckLogin
     @PutMapping("/student")
     public R updateStudent(@RequestBody Student student){
         //用户名 角色 不能修改
@@ -103,8 +119,8 @@ public class StudentsInfoController {
             return new R(false,403,"修改学生信息失败");
         }
     }
-
-    @PostMapping("/editStudentInfo") //修改学生信息 不包含密码
+    @SaCheckLogin
+    @PostMapping("/editStudentInfo") //在个人页面修改学生信息
     public R edidStudentInfo(@RequestBody Student student){
         if(studentService.editStudent(student)){
             return new R(true,"修改成功");
@@ -141,6 +157,8 @@ public class StudentsInfoController {
         }
     }
 
+
+
     @GetMapping("/exportAll")
     public void exportData(HttpServletResponse response) throws IOException {
 
@@ -164,6 +182,8 @@ public class StudentsInfoController {
     }
 
     //根据用户名 实现批量导出
+    @SaCheckLogin
+    @SaCheckRole("admin")
     @PostMapping("/exportByUsername")
     public void exportAll(@RequestBody List<String> usernames ,HttpServletResponse response) throws IOException { //apifox 直接json传递一个数组 ["username1","username2","username3"]
         List<Student> studentList =studentService.getByUsernames(usernames);

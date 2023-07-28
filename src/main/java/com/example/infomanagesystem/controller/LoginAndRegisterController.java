@@ -1,4 +1,6 @@
 package com.example.infomanagesystem.controller;
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.example.infomanagesystem.entity.Manager;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.entity.UserDTO;
@@ -17,19 +19,28 @@ public class LoginAndRegisterController {
     @Autowired
     private ManagerService managerService;
 
+    @GetMapping("/info")
+    public String  info(){
+        System.out.println("用户是否登录"+StpUtil.isLogin());
+        System.out.println("用户的角色"+StpUtil.getRoleList());
+        return "角色列表";
+    }
     @PostMapping("/login")
     public R login(@RequestBody UserDTO userDTO){
           String role=userDTO.getRole();//获取身份
           String username=userDTO.getUsername();
           String password=userDTO.getPassword();
-          if(role.equals("学生")){//是学生
+          if("学生".equals(role)){// 登陆者身份是学生
               if(studentService.login(username,password)!=null){//用户存在
                   if(studentService.checkStatus(username)==0){
                       return new R(false,404,"该账号不能使用,请联系管理员","登录失败");
                   }
-                  //账号能使用  status==1
-                  String token=JwtUtils.generateToken(username,role);
-                  return new R(true,200,"学生用户存在",token,"登录成功");
+                  //账号能使用  status==1  进行登录
+                  StpUtil.login(username);
+                  SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+                  System.out.println("登录成功得到的token 是"+tokenInfo);
+                 // String token=JwtUtils.generateToken(username,role);
+                  return new R(true,200,"student",tokenInfo);
               }
               else{
                   return new R(false,404,"学生用户不存在!请检查用户名或者密码是否正确");
@@ -37,14 +48,18 @@ public class LoginAndRegisterController {
           }
           else{ //管理员
               if(managerService.login(username,password)!=null){
-                  String token=JwtUtils.generateToken(username,role);
-                  return new R(true,200,"管理员用户存在",token,"登录成功");
+//                  String token=JwtUtils.generateToken(username,role);
+                  StpUtil.login(username); //登录 开启会话
+                  SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+                  System.out.println("登录成功得到的token 是"+tokenInfo);
+                return new R(true,200,"admin",tokenInfo);
               }
               else{
                   return new R(false,404,"管理员用户不存在!请检查用户名或者密码是否正确");
               }
           }
     }
+
 
     @PostMapping("/register")
     public R register(@RequestBody UserDTO userDTO){

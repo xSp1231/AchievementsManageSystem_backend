@@ -19,6 +19,14 @@ import java.util.List;
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
+
+    @Override
+    public String getRoleByUsername(String username) {
+        QueryWrapper<Student> q=new QueryWrapper<>();
+        q.eq("username",username);
+        return studentMapper.selectOne(q).getRole();
+    }
+
     @Override
     public Student login(String username ,String password) {
             QueryWrapper<Student> q=new QueryWrapper<>();

@@ -7,16 +7,16 @@ public class R {
     private boolean flag;
     private int  code;
     private String message;
-    private String jwttoken;
+    private String token;
     private Object data;
 
     //自定义构造器
 
-    public R(boolean flag, int code, String message,String jwttoken, Object data) {
+    public R(boolean flag, int code, String message,String token, Object data) {
         this.flag = flag;
         this.code = code;
         this.message = message;
-        this.jwttoken=jwttoken;
+        this.token=token;
         this.data = data;
     }
 
