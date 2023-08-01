@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.PatentSoft;
 import com.example.infomanagesystem.mapper.PatentSoftMapper;
 import com.example.infomanagesystem.service.PatentSoftService;
@@ -92,6 +93,13 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
         QueryWrapper<PatentSoft> q=new QueryWrapper<>();
         q.in("id",ids);
         return patentSoftMapper.selectList(q);
+    }
+
+    @Override
+    public Boolean deleteAllPatentSoftOfUsername(String username) {
+        QueryWrapper<PatentSoft> q=new QueryWrapper<>();
+        q.eq("username",username);
+        return patentSoftMapper.delete(q)>0;
     }
 
 }

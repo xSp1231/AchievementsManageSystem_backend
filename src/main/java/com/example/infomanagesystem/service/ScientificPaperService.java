@@ -32,5 +32,6 @@ public interface ScientificPaperService extends IService <ScientificPaper>{
     // 批量导出
     List<ScientificPaper> getByids(List<Integer> ids); //查询id在ids这个数组里面的所有数据
 
+    Boolean deleteAllScientificPaperOfUsername(String username);
 
 }

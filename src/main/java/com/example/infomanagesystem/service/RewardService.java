@@ -32,5 +32,6 @@ public interface RewardService  extends IService<Reward> {
     // 批量导出
     List<Reward> getByids(List<Integer> ids); //查询id在ids这个数组里面的所有数据
 
+    Boolean deleteAllRewardOfUsername(String username);
 
 }

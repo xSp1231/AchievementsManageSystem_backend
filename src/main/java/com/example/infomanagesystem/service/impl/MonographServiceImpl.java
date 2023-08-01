@@ -95,4 +95,11 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
         q.in("id",ids);
         return monographMapper.selectList(q);
     }
+
+    @Override
+    public Boolean deleteAllMonographOfUsername(String username) {
+        QueryWrapper<Monograph> q=new QueryWrapper<>();
+        q.eq("username",username);
+        return monographMapper.delete(q)>0;
+    }
 }

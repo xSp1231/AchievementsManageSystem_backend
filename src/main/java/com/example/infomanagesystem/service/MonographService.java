@@ -33,5 +33,7 @@ public interface MonographService extends IService<Monograph> {
     // 批量导出
     List<Monograph> getByids(List<Integer> ids); //查询id在ids这个数组里面的所有数据
 
+    //删除某一个用户时 我们就删除这个用户的所有monograph成果
+    Boolean deleteAllMonographOfUsername(String username);
 
 }

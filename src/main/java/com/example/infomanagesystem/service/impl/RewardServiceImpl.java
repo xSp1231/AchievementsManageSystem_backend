@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.Reward;
 import com.example.infomanagesystem.mapper.RewardMapper;
 import com.example.infomanagesystem.service.RewardService;
@@ -93,13 +94,13 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> impleme
         return rewardMapper.selectList(q);
     }
 
+    @Override
+    public Boolean deleteAllRewardOfUsername(String username) {
+        QueryWrapper<Reward> q=new QueryWrapper<>();
+        q.eq("username",username);
+        return rewardMapper.delete(q)>0;
 
-
-
-
-
-
-
+    }
 
 
 }

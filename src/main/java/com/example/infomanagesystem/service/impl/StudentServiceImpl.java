@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.infomanagesystem.entity.Student;
+import com.example.infomanagesystem.mapper.MonographMapper;
 import com.example.infomanagesystem.mapper.StudentMapper;
 import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
@@ -19,6 +20,7 @@ import java.util.List;
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
+
 
     @Override
     public String getRoleByUsername(String username) {
@@ -75,6 +77,10 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public boolean deleteStudentByUsername(String username) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username);
+        //先删除用户的成果 再删除用户
+
+
+
         return studentMapper.delete(q) > 0;
     }
 

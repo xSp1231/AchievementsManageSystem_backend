@@ -12,7 +12,7 @@ import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.result.R;
-import com.example.infomanagesystem.service.StudentService;
+import com.example.infomanagesystem.service.*;
 import com.example.infomanagesystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author xushupeng
@@ -34,6 +35,19 @@ import java.util.List;
 public class StudentsInfoController {
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private ManagerService managerService;
+    @Autowired
+    private MonographService monographService;
+    @Autowired
+    private ScientificPaperService scientificPaperService;
+    @Autowired
+    private RewardService rewardService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private PatentSoftService patentSoftService;
+    //已经修改
     @SaCheckLogin
     @SaCheckRole("admin")
     @GetMapping("/getAll") //得到所有学生信息
@@ -41,28 +55,43 @@ public class StudentsInfoController {
         List<Student> studentList=studentService.getAll();
         return new R(true ,200,"所有学生",studentList);
     }
+
+    //已经修改
     @SaCheckLogin
     @GetMapping("student/{currentPage}/{pageSize}") //http://localhost:8080/2/3
     public R getPage(@PathVariable int currentPage,@PathVariable int pageSize, Student student){
+        //如果是学生 student.getUsername=="前端传过来的值"  判断一下 再返回数据
         System.out.println("分页查询中的student is"+student);
-      return new R(true,200,"分页信息",studentService.getPage(currentPage,pageSize,student));
+        String username= (String) StpUtil.getLoginId();
+        //得到登陆者的身份
+        String role=managerService.getRoleByUsername(username);
+        if("admin".equals(role)){//如果是管理员 可以返回所有学生的数据
+            return new R(true,200,"分页信息",studentService.getPage(currentPage,pageSize,student));
+        }
+        else{//如果是学生，就只能的到本人的数据
+            student.setUsername(username);
+            return new R(true,200,"分页信息",studentService.getPage(currentPage,pageSize,student));
+        }
     }
 
-    @SaCheckLogin   // 用户页面  编辑个人信息的时候 要先找到信息使用
+    //已经修改
+    @SaCheckLogin   // 用户管理页面  编辑个人信息的时候 要先找到信息使用  管理员才能使用
+    @SaCheckRole("admin")
     @GetMapping("/selectStudentByUsername/{username}")
     public R selectStudentByUsername(@PathVariable String username){
         System.out.println("按照姓名搜索用户的username is "+username);
         return new R(true,200,"用户已找到",studentService.selectStudentByUsername(username));
     }
-
-
+    //已经修改
     @SaCheckLogin
+    @SaCheckRole("student")
     @GetMapping("/getUserInfo")   //个人中心页面 学生修改个人信息的时候 先要获取该学生的信息 前端携带token
     public R getUserInfo(){
         System.out.println("个人信息会话号码(账号)"+ StpUtil.getLoginId());
         String username= (String) StpUtil.getLoginId();
      return new R(true,200,"登录者的用户信息已经获得",studentService.selectStudentByUsername(username));
     }
+    //已经修改
     @SaCheckLogin
     @SaCheckRole("admin")
     @PostMapping("/student") //管理员添加学生
@@ -75,30 +104,70 @@ public class StudentsInfoController {
         }
     }
 
+    //已经修改
     @SaCheckLogin
     @DeleteMapping("/student/{username}") //个人中心页面学生注销  用户页面管理员通过用户名删除 //http://localhost:8080/student/test6
     public R deleteStudent(@PathVariable String username){ // @RequestParam 是针对于前端param进行传参
-        System.out.println("username is "+username);       // @PathVarible  是针对于在url上面进行传参  url拼接
-       if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
-           return new R(true,204,"学生"+username+"删除成功!");
+        System.out.println("要删除的username is "+username);       // @PathVarible  是针对于在url上面进行传参  url拼接
+        String LoginUsername=String.valueOf(StpUtil.getLoginId());
+        System.out.println("登陆者的username is"+LoginUsername);
+
+        if(Objects.equals(username, LoginUsername) &&"student".equals(managerService.getRoleByUsername(username))){//操作者为本人且为学生
+           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
+               monographService.deleteAllMonographOfUsername(username);
+               patentSoftService.deleteAllPatentSoftOfUsername(username);
+               rewardService.deleteAllRewardOfUsername(username);
+               scientificPaperService.deleteAllScientificPaperOfUsername(username);
+               projectService.deleteAllProjectOfUsername(username);
+               return new R(true,204,"学生注销成功!");//防止学生访问管理员页面 删除个人信息 之后可以看到其他人的成果信息
+           }
+           else{
+               return  new R(false,404,"学生"+username+"删除失败!");
+           }
+       }
+       else if("admin".equals(managerService.getRoleByUsername(LoginUsername))) {//如果操作者为管理员 就可以随便删除学生
+           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
+               monographService.deleteAllMonographOfUsername(username);
+               patentSoftService.deleteAllPatentSoftOfUsername(username);
+               rewardService.deleteAllRewardOfUsername(username);
+               scientificPaperService.deleteAllScientificPaperOfUsername(username);
+               projectService.deleteAllProjectOfUsername(username);
+               return new R(true,204,"学生"+username+"删除成功!");
+           }
+           else{
+               return  new R(false,404,"学生"+username+"删除失败!");
+           }
        }
        else{
-           return  new R(false,404,"学生"+username+"删除失败!");
+           System.out.println("删除时候的异常情况");
+           return  new R(false,404,"异常情况");
+
        }
     }
 
-
+    //已经修改
     @SaCheckLogin
     @SaCheckRole("admin")
     //批量删除学生信息
     @PostMapping("/deleteUsersByUsernames")
     public R deleteUsersByUsernames(@RequestBody List<String> usernames){
         System.out.println("前端传过来的usernames is "+usernames);
+        for (String username : usernames) { //删除与用户相关的所有所有成果信息
+            System.out.println("遍历的元素依次为"+username);
+            monographService.deleteAllMonographOfUsername(username);
+            patentSoftService.deleteAllPatentSoftOfUsername(username);
+            rewardService.deleteAllRewardOfUsername(username);
+            scientificPaperService.deleteAllScientificPaperOfUsername(username);
+            projectService.deleteAllProjectOfUsername(username);
+        }
         studentService.deleteUsers(usernames);
         return new R(true,204,"批量删除成功");
     }
+
+    //已经修改
     //管理员用户管理页面修改学生信息
     @SaCheckLogin
+    @SaCheckRole("admin")
     @PutMapping("/student")
     public R updateStudent(@RequestBody Student student){
         //用户名 角色 不能修改
@@ -110,6 +179,7 @@ public class StudentsInfoController {
         }
     }
     @SaCheckLogin
+    @SaCheckRole("student")
     @PostMapping("/editStudentInfo") //在个人页面修改学生信息
     public R edidStudentInfo(@RequestBody Student student){
         if(studentService.editStudent(student)){

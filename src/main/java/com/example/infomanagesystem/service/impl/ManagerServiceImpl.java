@@ -14,16 +14,17 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     @Autowired
     private ManagerMapper managerMapper;
 
+   //根据用户名得到登陆者的角色  防止出现 我是以学生身份登录 但是可以看到所有学生的信息
     @Override
     public String getRoleByUsername(String username) {
         QueryWrapper<Manager> q=new QueryWrapper<>();
         q.eq("username",username);
         Manager t=managerMapper.selectOne(q);
         if (t!=null){
-            return t.getRole();
+            return "admin";
         }
         else{
-            return "";
+            return "student";
         }
     }
 

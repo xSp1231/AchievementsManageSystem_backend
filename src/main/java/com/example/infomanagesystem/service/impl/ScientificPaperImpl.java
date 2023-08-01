@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.ScientificPaper;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.mapper.ScientificPaperMapper;
@@ -93,5 +94,12 @@ public class ScientificPaperImpl extends ServiceImpl<ScientificPaperMapper,Scien
         QueryWrapper<ScientificPaper> q=new QueryWrapper<>();
         q.in("id",ids);
         return scientificPaperMapper.selectList(q);
+    }
+
+    @Override
+    public Boolean deleteAllScientificPaperOfUsername(String username) {
+        QueryWrapper<ScientificPaper> q=new QueryWrapper<>();
+        q.eq("username",username);
+        return scientificPaperMapper.delete(q)>0;
     }
 }

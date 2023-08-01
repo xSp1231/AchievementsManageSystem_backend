@@ -37,7 +37,7 @@ public class StpInterfaceImpl implements StpInterface {
 
         List<String> list = new ArrayList<String>(); //角色表
         System.out.println("登陆者的角色是"+managerService.getRoleByUsername(String.valueOf(loginId)));
-        if("".equals(managerService.getRoleByUsername(String.valueOf(loginId)))){ //如果角色是学生 在管理员的表里面没有找到的话 =>为学生
+        if("student".equals(managerService.getRoleByUsername(String.valueOf(loginId)))){ //如果角色是学生 在管理员的表里面没有找到的话 =>为学生
            list.add("student");
         }
         else{

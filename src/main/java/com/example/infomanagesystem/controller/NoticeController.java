@@ -26,8 +26,6 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
-
-
     //查看所有公告
     @SaCheckLogin
     @GetMapping("/getNotices")

@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.infomanagesystem.entity.Monograph;
+import com.example.infomanagesystem.entity.PatentSoft;
 import com.example.infomanagesystem.entity.Project;
+import com.example.infomanagesystem.mapper.PatentSoftMapper;
 import com.example.infomanagesystem.mapper.ProjectMapper;
 import com.example.infomanagesystem.service.ProjectService;
 import org.apache.logging.log4j.util.Strings;
@@ -93,5 +96,13 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         q.in("id",ids);
         return projectMapper.selectList(q);
     }
+
+    @Override
+    public Boolean deleteAllProjectOfUsername(String username) {
+        QueryWrapper<Project> q=new QueryWrapper<>();
+        q.eq("username",username);
+        return projectMapper.delete(q)>0;
+    }
+
 
 }
