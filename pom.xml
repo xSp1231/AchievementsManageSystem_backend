@@ -104,6 +104,21 @@
             <version>1.35.0.RC</version>
         </dependency>
 
+        <!--验证码生成-->
+        <!--第一步先在pom.xml中导入hutool工具坐标-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-captcha</artifactId>
+            <version>5.8.5</version>
+        </dependency>
+
+        <!--整合redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>

@@ -9,7 +9,12 @@ import com.example.infomanagesystem.service.ManagerService;
 import com.example.infomanagesystem.service.StudentService;
 import com.example.infomanagesystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
+
 //登录接口
 @RestController
 @CrossOrigin
@@ -18,6 +23,9 @@ public class LoginAndRegisterController {
     private StudentService studentService;
     @Autowired
     private ManagerService managerService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
 
     @GetMapping("/info")
     public String  info(){
@@ -27,6 +35,14 @@ public class LoginAndRegisterController {
     }
     @PostMapping("/login")
     public R login(@RequestBody UserDTO userDTO){
+        System.out.println("登录者输入的验证码 is "+userDTO.getVerifyCode().toLowerCase());
+        //验证码错误 或者失效
+        String UserVerifyCodeKey="verifyCode"+userDTO.getVerifyCode().toLowerCase(); //得到用户的验证码的键
+        ValueOperations<String,String> ops=stringRedisTemplate.opsForValue();
+        if(ops.get(UserVerifyCodeKey)==null){//验证码错误 或者失效
+            return new R(false,404,"验证码错误或失效,请重新尝试","登录失败");
+        }
+        else{//验证码有效
           String role=userDTO.getRole();//获取身份
           String username=userDTO.getUsername();
           String password=userDTO.getPassword();
@@ -35,7 +51,8 @@ public class LoginAndRegisterController {
                   if(studentService.checkStatus(username)==0){
                       return new R(false,404,"该账号不能使用,请联系管理员","登录失败");
                   }
-                  //账号能使用  status==1  进行登录
+                  //账号能使用  status==1  进行登录  删除验证码
+                  stringRedisTemplate.delete(UserVerifyCodeKey);
                   StpUtil.login(username);
                   SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
                   System.out.println("登录成功得到的token 是"+tokenInfo);
@@ -49,6 +66,7 @@ public class LoginAndRegisterController {
           else{ //管理员
               if(managerService.login(username,password)!=null){
 //                  String token=JwtUtils.generateToken(username,role);
+                  stringRedisTemplate.delete(UserVerifyCodeKey);
                   StpUtil.login(username); //登录 开启会话
                   SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
                   System.out.println("登录成功得到的token 是"+tokenInfo);
@@ -58,7 +76,13 @@ public class LoginAndRegisterController {
                   return new R(false,404,"管理员用户不存在!请检查用户名或者密码是否正确");
               }
           }
+
+        }
     }
+
+
+
+
 
 
     @PostMapping("/register")
