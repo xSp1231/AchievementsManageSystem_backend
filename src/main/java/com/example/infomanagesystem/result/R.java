@@ -44,4 +44,11 @@ public class R {
         this.message=message;
     }
 
+    public static R success(){
+        return new R(true,200,"SUCCESS!");
+    }
+    public static R error(){
+        return new R(false,400,"something wrong has happened!");
+    }
+
 }

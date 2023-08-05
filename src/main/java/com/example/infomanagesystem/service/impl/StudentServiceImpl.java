@@ -20,8 +20,6 @@ import java.util.List;
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
-
-
     @Override
     public String getRoleByUsername(String username) {
         QueryWrapper<Student> q=new QueryWrapper<>();
@@ -140,5 +138,23 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.in("username",usernames);
         return studentMapper.selectList(q);
+    }
+
+    @Override
+    public int checkUsernameAndEmail(String username,String email) {
+        QueryWrapper<Student> q=new QueryWrapper<>();
+        q.eq("username",username);
+        Student temp=studentMapper.selectOne(q);
+        if(temp!=null){//该用户存在
+            if(email.equals(temp.getEmail())){
+                return 1;// "用户名,邮箱号匹配成功";
+            }
+            else{
+                return 2;//"邮箱号填写错误(可能是添加了@qq.com后缀)";
+            }
+        }
+        else{
+           return  0;//"用户名输入错误!(用户不存在)";
+        }
     }
 }

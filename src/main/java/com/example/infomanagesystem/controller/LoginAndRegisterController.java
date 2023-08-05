@@ -81,10 +81,6 @@ public class LoginAndRegisterController {
     }
 
 
-
-
-
-
     @PostMapping("/register")
     public R register(@RequestBody UserDTO userDTO){
         String role=userDTO.getRole();//获取身份
@@ -92,14 +88,16 @@ public class LoginAndRegisterController {
         String password=userDTO.getPassword();
         String name=userDTO.getName();
         String major=userDTO.getMajor();
+        String email=userDTO.getEmail();
         int status=userDTO.getStatus();
         if("学生".equals(role)){
-            Student st=new Student();
+            Student st=new Student(); //状态默认为1 账号可以使用
             st.setUsername(username);
             st.setPassword(password);
             st.setName(name);
             st.setRole(role);
             st.setMajor(major);
+            st.setEmail(email);
             //st.setStatus(status);
             if(studentService.register(st)){ //true
                 return new R(true,201,"学生用户添加成功");
@@ -108,19 +106,22 @@ public class LoginAndRegisterController {
                 return new R(false,400,"该用户已存在");
             }
         }
-        else{//管理员用户
-            Manager ma=new Manager();
-            ma.setUsername(username);
-            ma.setPassword(password);
-            ma.setName(name);
-            ma.setRole(role);
-            if(managerService.register(ma)){ //true
-                return new R(true,201,"管理员用户添加成功");
-            }
-            else{ //false
-                return new R(false,400,"该管理员用户已存在");
-            }
-
+//        else{//管理员用户
+//            Manager ma=new Manager();
+//            ma.setUsername(username);
+//            ma.setPassword(password);
+//            ma.setName(name);
+//            ma.setRole(role);
+//            if(managerService.register(ma)){ //true
+//                return new R(true,201,"管理员用户添加成功");
+//            }
+//            else{ //false
+//                return new R(false,400,"该管理员用户已存在");
+//            }
+//
+//        }
+        else{
+           return R.error();
         }
     }
 }

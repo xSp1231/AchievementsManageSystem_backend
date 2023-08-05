@@ -37,7 +37,16 @@ public class Student {
     @ColumnWidth(10)
     private String role="学生";  //角色 学生
 
+    //qq邮箱
+    @ExcelProperty(value = "qq号")
+    @ColumnWidth(10)
+    private String email;
+
+
     @ExcelProperty(value = "帐号状态")
     @ColumnWidth(10)
     private int status=1;   //账号状态 1 可用 0 不可用
+
+
+
 }

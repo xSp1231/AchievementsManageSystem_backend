@@ -10,5 +10,6 @@ public class UserDTO { //通用类 来存储前端传过来的数据
     private String verifyCode;//验证码存放
     private String name;
     private String major;
+    private String email;
     private int status;
 }

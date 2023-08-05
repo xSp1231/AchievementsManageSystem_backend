@@ -31,4 +31,8 @@ public interface StudentService extends IService<Student> {
      void deleteUsers(List<String> usernames); //批量删除 通过传入的一组username 来删除
 
      List<Student> getByUsernames(List<String> usernames); //查询用户名在usernames这个数组里面的所有数据
+     //找回密码第一步 输入用户名  邮箱号  检测是否存在 匹配
+     int checkUsernameAndEmail(String username,String email);
+
+
 }
