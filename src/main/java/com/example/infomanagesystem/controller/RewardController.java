@@ -91,7 +91,7 @@ public class RewardController {
             return new R(true, 201, "奖项信息填报上传成功,待审核");
         }
         else{
-            return new R(false, 201, "奖项填报上传失败!,请检查是否有重复填报。如有,可以选择编辑或删除操作");
+            return new R(false, 201, "奖项填报上传失败!,请检查是否有重复填报 或者用户名是否存在");
         }
     }
     //根据id删除单个

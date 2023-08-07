@@ -9,6 +9,7 @@ import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.PatentSoft;
 import com.example.infomanagesystem.mapper.PatentSoftMapper;
 import com.example.infomanagesystem.service.PatentSoftService;
+import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
 
     @Autowired
     private PatentSoftMapper patentSoftMapper;
-
+    @Autowired
+    private StudentService studentService;
     @Override
     public List<PatentSoft> getAllPatentSoft(){
         return patentSoftMapper.selectList(null);
@@ -47,7 +49,9 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
         QueryWrapper<PatentSoft> q=new QueryWrapper<>();
         q.eq("username",patentSoft.getUsername());
         q.eq("name",patentSoft.getName());
-
+        if(studentService.selectStudentByUsername(patentSoft.getUsername())==null){
+            return false;
+        }
         if(patentSoftMapper.selectOne(q)==null){ //相同用户 相同标题展示不存在
             return patentSoftMapper.insert(patentSoft)>0;
         }

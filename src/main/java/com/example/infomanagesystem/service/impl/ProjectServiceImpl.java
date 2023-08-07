@@ -11,6 +11,7 @@ import com.example.infomanagesystem.entity.Project;
 import com.example.infomanagesystem.mapper.PatentSoftMapper;
 import com.example.infomanagesystem.mapper.ProjectMapper;
 import com.example.infomanagesystem.service.ProjectService;
+import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ import java.util.List;
 public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> implements ProjectService {
     @Autowired
     private ProjectMapper projectMapper;
-
+    @Autowired
+    private StudentService studentService;
     @Override
     public List<Project> getAllProject() {
         return projectMapper.selectList(null);
@@ -48,7 +50,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         QueryWrapper<Project> q=new QueryWrapper<>();
         q.eq("username",project.getUsername());
         q.eq("projectName",project.getProjectName());
-
+        if(studentService.selectStudentByUsername(project.getUsername())==null){
+            return false;
+        }
         if(projectMapper.selectOne(q)==null){ //相同用户 相同标题展示不存在
             return projectMapper.insert(project)>0;
         }

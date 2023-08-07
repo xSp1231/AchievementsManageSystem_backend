@@ -11,6 +11,7 @@ import com.example.infomanagesystem.mapper.MonographMapper;
 import com.example.infomanagesystem.mapper.ScientificPaperMapper;
 import com.example.infomanagesystem.service.ManagerService;
 import com.example.infomanagesystem.service.MonographService;
+import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ import java.util.List;
 public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph>  implements MonographService {
     @Autowired
     private MonographMapper monographMapper;
+    @Autowired
+    private StudentService studentService;
 
     @Override
     public List<Monograph> getAllMonograph() {
@@ -48,6 +51,10 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
         QueryWrapper<Monograph> q=new QueryWrapper<>();
         q.eq("username",monograph.getUsername());
         q.eq("monoName",monograph.getMonoName());
+        //看增加的成果的用户名是否存在
+        if(studentService.selectStudentByUsername(monograph.getUsername())==null){
+            return false;
+        }
 
         if(monographMapper.selectOne(q)==null){ //相同用户 相同标题展示不存在
             return monographMapper.insert(monograph)>0;

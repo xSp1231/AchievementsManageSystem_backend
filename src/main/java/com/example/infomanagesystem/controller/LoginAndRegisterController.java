@@ -35,7 +35,7 @@ public class LoginAndRegisterController {
     }
     @PostMapping("/login")
     public R login(@RequestBody UserDTO userDTO){
-        System.out.println("登录者输入的验证码 is "+userDTO.getVerifyCode().toLowerCase());
+        //System.out.println("登录者输入的验证码 is "+userDTO.getVerifyCode().toLowerCase());
         //验证码错误 或者失效
         String UserVerifyCodeKey="verifyCode"+userDTO.getVerifyCode().toLowerCase(); //得到用户的验证码的键
         ValueOperations<String,String> ops=stringRedisTemplate.opsForValue();

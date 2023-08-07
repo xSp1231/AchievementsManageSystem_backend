@@ -84,7 +84,6 @@ public class MonographController {
         }
     }
 
-
     //管理员 学生 添加信息
     @SaCheckLogin
     @PostMapping("/add")
@@ -93,7 +92,7 @@ public class MonographController {
             return new R(true, 201, "专著信息填报上传成功,待审核");
         }
         else{
-            return new R(false, 201, "专著填报上传失败!,请检查是否有重复填报。如有,可以选择编辑或删除操作");
+            return new R(false, 201, "专著填报上传失败!,请检查是否有重复填报 或者用户名是否存在");
         }
     }
     //根据id删除单个

@@ -3,6 +3,7 @@ package com.example.infomanagesystem.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.infomanagesystem.entity.Reward;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @Author xushupeng
@@ -10,5 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RewardMapper extends BaseMapper<Reward> {
+    @Select("select count(*) from t_reward") //sql语句应该为双引号
+    int getRewardNum();
 
 }

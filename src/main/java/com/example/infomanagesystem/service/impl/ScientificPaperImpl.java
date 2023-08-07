@@ -10,6 +10,7 @@ import com.example.infomanagesystem.entity.ScientificPaper;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.mapper.ScientificPaperMapper;
 import com.example.infomanagesystem.service.ScientificPaperService;
+import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ import java.util.List;
 public class ScientificPaperImpl extends ServiceImpl<ScientificPaperMapper,ScientificPaper> implements ScientificPaperService  {
    @Autowired
    private ScientificPaperMapper scientificPaperMapper;
-
+    @Autowired
+    private StudentService studentService;
    @Override
    public List<ScientificPaper> getAllScientificPaper() {
        return scientificPaperMapper.selectList(null);
@@ -48,7 +50,9 @@ public class ScientificPaperImpl extends ServiceImpl<ScientificPaperMapper,Scien
        QueryWrapper<ScientificPaper> q=new QueryWrapper<>();
        q.eq("username",scientificPaper.getUsername());
        q.eq("title",scientificPaper.getTitle());
-
+        if(studentService.selectStudentByUsername(scientificPaper.getUsername())==null){
+            return false;
+        }
        if(scientificPaperMapper.selectOne(q)==null){ //相同用户 相同标题展示不存在
            return scientificPaperMapper.insert(scientificPaper)>0;
        }

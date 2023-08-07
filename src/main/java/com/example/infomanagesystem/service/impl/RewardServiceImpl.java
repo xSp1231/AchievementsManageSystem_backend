@@ -9,6 +9,7 @@ import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.Reward;
 import com.example.infomanagesystem.mapper.RewardMapper;
 import com.example.infomanagesystem.service.RewardService;
+import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ import java.util.List;
 public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> implements RewardService {
     @Autowired
     private RewardMapper rewardMapper;
-
+    @Autowired
+    private StudentService studentService;
     @Override
     public List<Reward> getAllReward() {
         return rewardMapper.selectList(null);
@@ -46,7 +48,9 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> impleme
         QueryWrapper<Reward> q=new QueryWrapper<>();
         q.eq("username",reward.getUsername());
         q.eq("rewardName",reward.getRewardName());
-
+        if(studentService.selectStudentByUsername(reward.getUsername())==null){
+            return false;
+        }
         if(rewardMapper.selectOne(q)==null){ //相同用户 相同标题展示不存在
             return rewardMapper.insert(reward)>0;
         }
