@@ -51,7 +51,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public int checkStatus(String username) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username);
-        return studentMapper.selectOne(q).getStatus();//返回状态码
+        Student t=studentMapper.selectOne(q);
+        if(t!=null){ //找到了这个用户
+            return t.getStatus();
+        }//返回状态码
+        else{//没找到这个用户
+            return 0;
+        }
     }
 
     @Override

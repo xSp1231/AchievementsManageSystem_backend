@@ -47,6 +47,12 @@ public class Monograph {
     @ColumnWidth(20)
     private String isbn;//卷号
 
+    @ExcelProperty(value = "拒绝信息")
+    @ExcelIgnore  //忽略 可以不读  excel文件里面可以不需要这一列
+    @ColumnWidth(20)
+    private String refuseInfo;
+
+
     @ExcelProperty(value = "状态")
     @ColumnWidth(20)
     private String status;//当前专著成果的审核状态  审核  接收  打回

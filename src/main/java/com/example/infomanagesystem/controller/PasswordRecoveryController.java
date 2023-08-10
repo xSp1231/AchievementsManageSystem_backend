@@ -29,6 +29,11 @@ public class PasswordRecoveryController {
         System.out.println("得到的student is "+student);
         String username=student.getUsername();
         String email=student.getEmail();
+        //先检测一下账号状态 如果禁用或者这个账号不存在 那么点击忘记密码  找回也没有用 直接return
+        if(studentService.checkStatus(username)==0){
+            return new R(false,404,"该账号不能使用,密码找回操作无法进行。请联系管理员","找回失败");
+        }
+
         int  res=studentService.checkUsernameAndEmail(username,email);
         if(res==1){
             return new R(true,200,"用户名,邮箱号匹配成功");

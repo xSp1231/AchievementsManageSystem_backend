@@ -56,6 +56,12 @@ public class Reward {
     @ColumnWidth(20)
     private String place;
 
+    @ExcelProperty(value = "拒绝信息")
+    @ExcelIgnore  //忽略 可以不读  excel文件里面可以不需要这一列
+    @ColumnWidth(20)
+    private String refuseInfo;
+
+
     @ExcelProperty(value = "成果填报状态")
     @ColumnWidth(20)
     private String status;

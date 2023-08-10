@@ -65,6 +65,11 @@ public class Project {
     @ColumnWidth(20)
     private String endingTime;
 
+    @ExcelProperty(value = "拒绝信息")
+    @ExcelIgnore  //忽略 可以不读  excel文件里面可以不需要这一列
+    @ColumnWidth(20)
+    private String refuseInfo;
+
 
     @ExcelProperty(value = "状态")
     @ColumnWidth(20)

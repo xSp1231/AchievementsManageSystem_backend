@@ -64,6 +64,12 @@ public class ScientificPaper {
     @ColumnWidth(20)
     private String accessionNumber;//检索号
 
+
+    @ExcelProperty(value = "拒绝详情")
+    @ExcelIgnore  //忽略 可以不读  excel文件里面可以不需要这一列
+    @ColumnWidth(20)
+    private String refuseInfo;
+
     @ExcelProperty(value = "状态")
     @ColumnWidth(20)
     private String status;//当前成果审核的状态  审核  接收  打回
