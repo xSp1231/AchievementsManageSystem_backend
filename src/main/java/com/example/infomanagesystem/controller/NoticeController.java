@@ -81,5 +81,10 @@ public class NoticeController {
     public R uploadToOss(@RequestParam(value = "file",required = false) MultipartFile file) throws IOException {
         return new R(true,200, UploadUtil.uploadImage(file),"存储到阿里云Oss");
     }
-
+    //删除oss bucket里面的图片
+    @PostMapping("/deleteFile/{filename}")
+    public R deleteFile(@PathVariable String filename){
+        System.out.println("要删除的filename is "+filename);//山川cd5b82e008714a2a931908429dbb2791.jpg
+        return new R(true,200, UploadUtil.deleteFile(filename),"删除成功");
+    }
 }

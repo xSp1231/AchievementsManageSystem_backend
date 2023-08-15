@@ -7,11 +7,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.PatentSoft;
+import com.example.infomanagesystem.entity.PictureEntity.MonographPicture;
+import com.example.infomanagesystem.entity.PictureEntity.ProjectPicture;
 import com.example.infomanagesystem.entity.Project;
 import com.example.infomanagesystem.mapper.PatentSoftMapper;
+import com.example.infomanagesystem.mapper.PictureMapper.ProjectPictureMapper;
 import com.example.infomanagesystem.mapper.ProjectMapper;
 import com.example.infomanagesystem.service.ProjectService;
 import com.example.infomanagesystem.service.StudentService;
+import com.example.infomanagesystem.utils.UploadUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     private ProjectMapper projectMapper;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private ProjectPictureMapper projectPictureMapper;
     @Override
     public List<Project> getAllProject() {
         return projectMapper.selectList(null);
@@ -63,14 +69,28 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     @Override
     public boolean deleteProject(Integer id) {
-        return projectMapper.deleteById(id)>0;
+        Project  project= projectMapper.selectById(id);//根据id搜索成果信息
+        //根据成果的username monoName(成果名字) 删除对应的成果信息
+        String username=project.getUsername();
+        String achievementName=project.getProjectName();
+        QueryWrapper<ProjectPicture> q=new QueryWrapper<>();
+        q.eq("username",username).eq("achievementName",achievementName);
+        //一个成果可能对应多张图片  ----删除图片  //找到符合要求的
+        List<ProjectPicture> lis=projectPictureMapper.selectList(q);
+        if(lis!=null){
+            for (ProjectPicture it :lis){
+                UploadUtil.deleteFile(it.getUrl());///删除oss上面对应的文件
+                projectPictureMapper.deleteById(it.getId());//删除整个对象
+            }
+        }
+        return projectMapper.deleteById(id)>0;//删除成果
     }
 
     @Override
     public void deleteBatch(List<Integer> ids) { //根据id批量删除
-        QueryWrapper<Project> q=new QueryWrapper<>();
-        q.in("id",ids);
-        projectMapper.delete(q);
+        for(Integer id:ids){//循环删除
+            deleteProject(id);
+        }
         //  remove(q); //移除满足条件的所有元素 二者等价
     }
 
@@ -83,7 +103,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     public IPage<Project> getPage(int currentPage, int pageSize, Project project) {
         LambdaQueryWrapper<Project> q = new LambdaQueryWrapper<>();
         //可以根据什么来查询 username  category  status
-        q.like(Strings.isNotEmpty(project.getUsername()), Project::getUsername, project.getUsername());//student.getUsername()包含于Student::getUsername
+        q.eq(Strings.isNotEmpty(project.getUsername()), Project::getUsername, project.getUsername());//student.getUsername()包含于Student::getUsername
         q.like(Strings.isNotEmpty(project.getCategory()), Project::getCategory, project.getCategory());//("title","理论力学")
         q.like(Strings.isNotEmpty(project.getStatus()), Project::getStatus, project.getStatus());//student.getUsername()包含于Student::getUsername
         q.like(Strings.isNotEmpty(project.getProjectName()), Project::getProjectName, project.getProjectName());//student.getUsername()包含于Student::getUsername
@@ -105,7 +125,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     public Boolean deleteAllProjectOfUsername(String username) {
         QueryWrapper<Project> q=new QueryWrapper<>();
         q.eq("username",username);
-        return projectMapper.delete(q)>0;
+        List<Project> list=projectMapper.selectList(q);//找到该用户所有的monograph成果
+        for (Project it:list){
+            deleteProject(it.getId());
+        }
+        //找到要删除的username 对应的 monograph成果  之后找到这些成果对应的id 就可以完成 删除该成果的所有信息的功能
+        return true;
     }
 
 

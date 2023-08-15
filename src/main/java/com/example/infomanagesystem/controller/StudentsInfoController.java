@@ -55,7 +55,6 @@ public class StudentsInfoController {
         List<Student> studentList=studentService.getAll();
         return new R(true ,200,"所有学生",studentList);
     }
-
     //已经修改
     @SaCheckLogin
     @GetMapping("student/{currentPage}/{pageSize}") //http://localhost:8080/2/3
@@ -111,38 +110,48 @@ public class StudentsInfoController {
         System.out.println("要删除的username is "+username);       // @PathVarible  是针对于在url上面进行传参  url拼接
         String LoginUsername=String.valueOf(StpUtil.getLoginId());
         System.out.println("登陆者的username is"+LoginUsername);
+//        if(Objects.equals(username, LoginUsername) &&"student".equals(managerService.getRoleByUsername(username))){//操作者为本人且为学生
+//           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
+//               monographService.deleteAllMonographOfUsername(username);
+//               patentSoftService.deleteAllPatentSoftOfUsername(username);
+//               rewardService.deleteAllRewardOfUsername(username);
+//               scientificPaperService.deleteAllScientificPaperOfUsername(username);
+//               projectService.deleteAllProjectOfUsername(username);
+//               return new R(true,204,"学生注销成功!");//防止学生访问管理员页面 删除个人信息 之后可以看到其他人的成果信息
+//           }
+//           else{
+//               return  new R(false,404,"学生"+username+"删除失败!");
+//           }
+//       }
+//       else if("admin".equals(managerService.getRoleByUsername(LoginUsername))) {//如果操作者为管理员 就可以随便删除学生
+//           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
+//               monographService.deleteAllMonographOfUsername(username);
+//               patentSoftService.deleteAllPatentSoftOfUsername(username);
+//               rewardService.deleteAllRewardOfUsername(username);
+//               scientificPaperService.deleteAllScientificPaperOfUsername(username);
+//               projectService.deleteAllProjectOfUsername(username);
+//               return new R(true,204,"学生"+username+"删除成功!");
+//           }
+//           else{
+//               return  new R(false,404,"学生"+username+"删除失败!");
+//           }
+//       }
+//       else{
+//           System.out.println("删除时候的异常情况");
+//           return  new R(false,404,"异常情况");
+//       }
+        if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
+            monographService.deleteAllMonographOfUsername(username);
+            patentSoftService.deleteAllPatentSoftOfUsername(username);
+            rewardService.deleteAllRewardOfUsername(username);
+            scientificPaperService.deleteAllScientificPaperOfUsername(username);
+            projectService.deleteAllProjectOfUsername(username);
+            return new R(true,204,"学生注销成功!");//防止学生访问管理员页面 删除个人信息 之后可以看到其他人的成果信息
+        }
+        else{
+            return  new R(false,404,"学生"+username+"删除失败!");
+        }
 
-        if(Objects.equals(username, LoginUsername) &&"student".equals(managerService.getRoleByUsername(username))){//操作者为本人且为学生
-           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
-               monographService.deleteAllMonographOfUsername(username);
-               patentSoftService.deleteAllPatentSoftOfUsername(username);
-               rewardService.deleteAllRewardOfUsername(username);
-               scientificPaperService.deleteAllScientificPaperOfUsername(username);
-               projectService.deleteAllProjectOfUsername(username);
-               return new R(true,204,"学生注销成功!");//防止学生访问管理员页面 删除个人信息 之后可以看到其他人的成果信息
-           }
-           else{
-               return  new R(false,404,"学生"+username+"删除失败!");
-           }
-       }
-       else if("admin".equals(managerService.getRoleByUsername(LoginUsername))) {//如果操作者为管理员 就可以随便删除学生
-           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
-               monographService.deleteAllMonographOfUsername(username);
-               patentSoftService.deleteAllPatentSoftOfUsername(username);
-               rewardService.deleteAllRewardOfUsername(username);
-               scientificPaperService.deleteAllScientificPaperOfUsername(username);
-               projectService.deleteAllProjectOfUsername(username);
-               return new R(true,204,"学生"+username+"删除成功!");
-           }
-           else{
-               return  new R(false,404,"学生"+username+"删除失败!");
-           }
-       }
-       else{
-           System.out.println("删除时候的异常情况");
-           return  new R(false,404,"异常情况");
-
-       }
     }
 
     //已经修改

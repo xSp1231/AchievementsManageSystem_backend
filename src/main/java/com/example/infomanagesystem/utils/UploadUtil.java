@@ -2,10 +2,13 @@ package com.example.infomanagesystem.utils;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.ObjectMetadata;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.UUID;
+
 /**
  * @Author xushupeng
  * @Date 2023-07-20 15:31
@@ -13,26 +16,71 @@ import java.util.UUID;
 ///图片上传到oss的工具类
 public class UploadUtil {
     //阿里oss域名
-    public static final String ALI_DOMAIN= "https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/"; //域名
+    public static final String ALI_DOMAIN = "https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/"; //域名
     //生成文件名
+    public static final String endPoint = "http://oss-cn-chengdu.aliyuncs.com";
+    // ID // LTAI5t9zF4K3iz4GPFDjfVQB
+    //KEY // UCtA3Zttf4LbFsW8hk8BsXQE0kGvhh
+    public static final String acessKeyID = "LTAI5t9zF4K3iz4GPFDjfVQB";
+    public static final String acessKeySecret = "UCtA3Zttf4LbFsW8hk8BsXQE0kGvhh";
 
-    public static  String uploadImage(MultipartFile file) throws IOException {
-       String originalFileName= file.getOriginalFilename();
-       String ext="."+ FilenameUtils.getExtension(originalFileName);
-       String uuid= UUID.randomUUID().toString().replace("-",""); //将uuid里面的”-“替代
-       String fileName=uuid+ext; //最终文件名的组成
-        //地域节点
-       String endPoint="http://oss-cn-chengdu.aliyuncs.com";
-        // ID // LTAI5t9zF4K3iz4GPFDjfVQB
-        //KEY // UCtA3Zttf4LbFsW8hk8BsXQE0kGvhh
-       String acessKeyID="LTAI5t9zF4K3iz4GPFDjfVQB";
-       String acessKeySecret="UCtA3Zttf4LbFsW8hk8BsXQE0kGvhh";
+    public static String getcontentType(String filenameExtension) {
+        if (".pdf".equalsIgnoreCase(filenameExtension)) {
+            return "application/pdf";
+        }
+        if (".bmp".equalsIgnoreCase(filenameExtension)) {
+            return "image/bmp";
+        }
+        if (".gif".equalsIgnoreCase(filenameExtension)) {
+            return "image/gif";
+        }
+        if (".jpeg".equalsIgnoreCase(filenameExtension) ||
+                ".jpg".equalsIgnoreCase(filenameExtension) ||
+                ".png".equalsIgnoreCase(filenameExtension)) {
+            return "image/jpg";
+        }
+        if (".html".equalsIgnoreCase(filenameExtension)) {
+            return "text/html";
+        }
+        if (".txt".equalsIgnoreCase(filenameExtension)) {
+            return "text/plain";
+        }
+        if (".vsd".equalsIgnoreCase(filenameExtension)) {
+            return "application/vnd.visio";
+        }
+        if (".pptx".equalsIgnoreCase(filenameExtension) ||
+                ".ppt".equalsIgnoreCase(filenameExtension)) {
+            return "application/vnd.ms-powerpoint";
+        }
+        if (".docx".equalsIgnoreCase(filenameExtension)) {
+            return "application/msword";
+        }
+        if (".xml".equalsIgnoreCase(filenameExtension)) {
+            return "text/xml";
+        }
+        return "image/jpg";
+    }
+
+    public static String uploadImage(MultipartFile file) throws IOException {
+        String originalFileName = file.getOriginalFilename();
+        String pre = originalFileName.substring(0, originalFileName.lastIndexOf('.'));//左闭右开区间
+        String ext = "." + FilenameUtils.getExtension(originalFileName);//文件后缀
+        String uuid = UUID.randomUUID().toString().replace("-", ""); //将uuid里面的”-“替代
+        String fileName = pre + uuid + ext; //最终文件名的组成
+        String type = originalFileName.substring(originalFileName.lastIndexOf("."));
         //oss客户端对象
-        OSS ossClient=new OSSClientBuilder().build(endPoint,acessKeyID,acessKeySecret);
-        ossClient.putObject("xsp-datastore",fileName,file.getInputStream()); //三个参数 "oss的bucket名字"
+        OSS ossClient = new OSSClientBuilder().build(endPoint, acessKeyID, acessKeySecret);
+        ossClient.putObject("xsp-datastore", fileName, file.getInputStream()); //三个参数 "oss的bucket名字"
         ossClient.shutdown();//关闭
-
         // oss客户端对象
-        return ALI_DOMAIN+fileName;
+        return ALI_DOMAIN + fileName;//访问路劲
+    }
+    public static String deleteFile(String fileName) {
+
+        //oss客户端对象
+        OSS ossClient = new OSSClientBuilder().build(endPoint, acessKeyID, acessKeySecret);
+        ossClient.deleteObject("xsp-datastore", fileName);//filename  xxxx.jpg
+        return fileName + "删除成功";
+
     }
 }

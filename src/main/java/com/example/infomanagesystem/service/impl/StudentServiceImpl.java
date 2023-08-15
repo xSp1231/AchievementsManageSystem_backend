@@ -1,5 +1,6 @@
 package com.example.infomanagesystem.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -82,8 +83,8 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username);
         //先删除用户的成果 再删除用户
-
-
+        StpUtil.logout(username);//强制使得token失效
+        System.out.println("shixiao");
 
         return studentMapper.delete(q) > 0;
     }
@@ -133,10 +134,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public void deleteUsers(List<String> usernames) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.in("username",usernames);
+        for(String it:usernames){
+            deleteStudentByUsername(it); //方法互相调用
+        }
         //remove 方法是 IService 接口中定义的方法，实现了该接口的服务类可以直接使用该方法。
         //remove 方法可以删除符合条件的一组对象，也可以删除单个对象。
         //具体来说，如果传入的参数是一个对象，则会删除这个对象；如果传入的参数是一个查询条件对象，则会删除符合条件的所有对象。
-        remove(q);
+        //remove(q);
     }
 
     @Override

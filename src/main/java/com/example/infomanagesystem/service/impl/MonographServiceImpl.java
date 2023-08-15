@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.infomanagesystem.entity.Monograph;
+import com.example.infomanagesystem.entity.PictureEntity.MonographPicture;
 import com.example.infomanagesystem.entity.ScientificPaper;
 import com.example.infomanagesystem.mapper.MonographMapper;
+import com.example.infomanagesystem.mapper.PictureMapper.MonographPictureMapper;
 import com.example.infomanagesystem.mapper.ScientificPaperMapper;
 import com.example.infomanagesystem.service.ManagerService;
 import com.example.infomanagesystem.service.MonographService;
 import com.example.infomanagesystem.service.StudentService;
+import com.example.infomanagesystem.utils.UploadUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,9 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private  MonographPictureMapper monographPictureMapper;
+
     @Override
     public List<Monograph> getAllMonograph() {
         return monographMapper.selectList(null);
@@ -41,6 +47,7 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
         return monographMapper.selectList(q);
     }
 
+    //删除monograph成果
     @Override
     public Monograph getMonographById(Integer id) {
         return monographMapper.selectById(id);
@@ -51,7 +58,7 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
         QueryWrapper<Monograph> q=new QueryWrapper<>();
         q.eq("username",monograph.getUsername());
         q.eq("monoName",monograph.getMonoName());
-        //看增加的成果的用户名是否存在
+        //看增加的成果的用户名是否存在   //同名 同成果
         if(studentService.selectStudentByUsername(monograph.getUsername())==null){
             return false;
         }
@@ -65,15 +72,32 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
     }
 
     @Override
-    public boolean deleteMonograph(Integer id) {
-        return monographMapper.deleteById(id)>0;
+    public boolean deleteMonograph(Integer id) {  //删除某一项成果---也需要将对应的img删除
+        Monograph  monograph= monographMapper.selectById(id);//根据id搜索成果信息
+        //根据成果的username monoName(成果名字) 删除对应的成果信息
+        String username=monograph.getUsername();
+        String achievementName=monograph.getMonoName();
+        QueryWrapper<MonographPicture> q=new QueryWrapper<>();
+        q.eq("username",username).eq("achievementName",achievementName);
+        //一个成果可能对应多张图片  ----删除图片  //找到符合要求的
+        List<MonographPicture> lis=monographPictureMapper.selectList(q);
+        if(lis!=null){
+            for (MonographPicture it :lis){
+                UploadUtil.deleteFile(it.getUrl());///删除oss上面对应的文件
+                monographPictureMapper.deleteById(it.getId());//删除整个对象
+            }
+        }
+        return monographMapper.deleteById(id)>0;//删除成果
     }
-
+    //批量删除成果
     @Override
     public void deleteBatch(List<Integer> ids) { //根据id批量删除
-        QueryWrapper<Monograph> q=new QueryWrapper<>();
-        q.in("id",ids);
-        monographMapper.delete(q);
+//        QueryWrapper<Monograph> q=new QueryWrapper<>();
+//        q.in("id",ids);
+//        monographMapper.delete(q);
+        for(Integer id:ids){//循环删除
+            deleteMonograph(id);
+        }
         //  remove(q); //移除满足条件的所有元素 二者等价
     }
 
@@ -86,7 +110,8 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
     public IPage<Monograph> getPage(int currentPage, int pageSize, Monograph monograph) {
         LambdaQueryWrapper<Monograph> q = new LambdaQueryWrapper<>();
         //可以根据什么来查询 username  title  status
-        q.like(Strings.isNotEmpty(monograph.getUsername()), Monograph::getUsername, monograph.getUsername());//student.getUsername()包含于Student::getUsername
+        //username查询一定要精确 防止用户名为test的人登录账号后 得到用户名为test1的用户的信息  这个时候应该避免模糊查询 使用精确查询
+        q.eq(Strings.isNotEmpty(monograph.getUsername()), Monograph::getUsername, monograph.getUsername());//student.getUsername()包含于Student::getUsername
         q.like(Strings.isNotEmpty(monograph.getMonoName()), Monograph::getMonoName, monograph.getMonoName());//("title","理论力学")
         q.like(Strings.isNotEmpty(monograph.getStatus()), Monograph::getStatus, monograph.getStatus());//student.getUsername()包含于Student::getUsername
 
@@ -107,6 +132,11 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
     public Boolean deleteAllMonographOfUsername(String username) {
         QueryWrapper<Monograph> q=new QueryWrapper<>();
         q.eq("username",username);
-        return monographMapper.delete(q)>0;
+        List<Monograph> list=monographMapper.selectList(q);//找到该用户所有的monograph成果
+        for (Monograph it:list){
+            deleteMonograph(it.getId());
+        }
+        //找到要删除的username 对应的 monograph成果  之后找到这些成果对应的id 就可以完成 删除该成果的所有信息的功能
+        return true;
     }
 }

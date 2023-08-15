@@ -37,7 +37,7 @@ public class Student {
     @ColumnWidth(10)
     private String role="学生";  //角色 学生
 
-    //qq邮箱
+    //qq邮箱  导入导出的时候需要
     @ExcelProperty(value = "qq号")
     @ColumnWidth(10)
     private String email;

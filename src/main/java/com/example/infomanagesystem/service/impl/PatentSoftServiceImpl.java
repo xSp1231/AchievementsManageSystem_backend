@@ -7,9 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.infomanagesystem.entity.Monograph;
 import com.example.infomanagesystem.entity.PatentSoft;
+import com.example.infomanagesystem.entity.PictureEntity.MonographPicture;
+import com.example.infomanagesystem.entity.PictureEntity.PatentSoftPicture;
 import com.example.infomanagesystem.mapper.PatentSoftMapper;
+import com.example.infomanagesystem.mapper.PictureMapper.PatentSoftPictureMapper;
 import com.example.infomanagesystem.service.PatentSoftService;
 import com.example.infomanagesystem.service.StudentService;
+import com.example.infomanagesystem.utils.UploadUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,8 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
     private PatentSoftMapper patentSoftMapper;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private PatentSoftPictureMapper patentSoftPictureMapper;
     @Override
     public List<PatentSoft> getAllPatentSoft(){
         return patentSoftMapper.selectList(null);
@@ -62,15 +68,28 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
 
     @Override
     public boolean deletePatentSoft(Integer id) {
-        return patentSoftMapper.deleteById(id)>0;
+        PatentSoft  patentSoft= patentSoftMapper.selectById(id);//根据id搜索成果信息
+        //根据成果的username monoName(成果名字) 删除对应的成果信息
+        String username=patentSoft.getUsername();
+        String achievementName=patentSoft.getName();
+        QueryWrapper<PatentSoftPicture> q=new QueryWrapper<>();
+        q.eq("username",username).eq("achievementName",achievementName);
+        //一个成果可能对应多张图片  ----删除图片  //找到符合要求的
+        List<PatentSoftPicture> lis=patentSoftPictureMapper.selectList(q);
+        if(lis!=null){
+            for (PatentSoftPicture it :lis){
+                UploadUtil.deleteFile(it.getUrl());///删除oss上面对应的文件
+                patentSoftPictureMapper.deleteById(it.getId());//删除整个对象
+            }
+        }
+        return patentSoftMapper.deleteById(id)>0;//删除成果
     }
 
     @Override
     public void deleteBatch(List<Integer> ids) { //根据id批量删除
-        QueryWrapper<PatentSoft> q=new QueryWrapper<>();
-        q.in("id",ids);
-        patentSoftMapper.delete(q);
-        //  remove(q); //移除满足条件的所有元素 二者等价
+        for(Integer id:ids){//循环删除
+            deletePatentSoft(id);
+        }
     }
 
     @Override  //编辑信息
@@ -82,7 +101,7 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
     public IPage<PatentSoft> getPage(int currentPage, int pageSize, PatentSoft patentSoft) {
         LambdaQueryWrapper<PatentSoft> q = new LambdaQueryWrapper<>();
         //可以根据什么来查询 username  name  status
-        q.like(Strings.isNotEmpty(patentSoft.getUsername()), PatentSoft::getUsername, patentSoft.getUsername());//student.getUsername()包含于Student::getUsername
+        q.eq(Strings.isNotEmpty(patentSoft.getUsername()), PatentSoft::getUsername, patentSoft.getUsername());//student.getUsername()包含于Student::getUsername
         q.like(Strings.isNotEmpty(patentSoft.getName()), PatentSoft::getName, patentSoft.getName());//("name","理论力学")
         q.like(Strings.isNotEmpty(patentSoft.getStatus()), PatentSoft::getStatus, patentSoft.getStatus());//student.getUsername()包含于Student::getUsername
 
@@ -103,7 +122,12 @@ public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentS
     public Boolean deleteAllPatentSoftOfUsername(String username) {
         QueryWrapper<PatentSoft> q=new QueryWrapper<>();
         q.eq("username",username);
-        return patentSoftMapper.delete(q)>0;
+        List<PatentSoft> list=patentSoftMapper.selectList(q);//找到该用户所有的monograph成果
+        for (PatentSoft it:list){
+            deletePatentSoft(it.getId());
+        }
+        //找到要删除的username 对应的 monograph成果  之后找到这些成果对应的id 就可以完成 删除该成果的所有信息的功能
+        return true;
     }
 
 }
