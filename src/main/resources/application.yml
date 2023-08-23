@@ -4,10 +4,10 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-     # url: jdbc:mysql://8.137.9.219/infomanagesystem?serverTimezone=UTC  #修改端口
-      url: jdbc:mysql://localhost/infomanagesystem?serverTimezone=UTC  #修改端口
-     # username: xspuser  #宝塔数据库的username  password
-      username: root  #本地数据库的username  password
+      url: jdbc:mysql://8.137.9.219/infomanagesystem?serverTimezone=UTC  #修改端口
+      #url: jdbc:mysql://localhost/infomanagesystem?serverTimezone=UTC  #修改端口
+      username: xspuser  #宝塔数据库的username  password
+      #username: root  #本地数据库的username  password
       password: root123
   servlet:     #
     multipart:

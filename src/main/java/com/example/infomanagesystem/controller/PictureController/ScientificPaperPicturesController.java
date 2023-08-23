@@ -28,8 +28,8 @@ import java.util.Map;
 public class ScientificPaperPicturesController {
     @Autowired
     private ScientificPaperPictureMapper scientificPaperPictureMapper;
-    public static  final String pre="https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/";
-
+    //public static  final String pre="https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/";
+    public static  final String pre="https://xspfile.yougi.top/";
     //图片的上传
     @SaCheckLogin
     @PostMapping("/uploadPictures")
@@ -42,13 +42,14 @@ public class ScientificPaperPicturesController {
 
         for (MultipartFile file : files) {
             String filename = file.getOriginalFilename();  //获取上传图片的文件名，包含后缀
-            System.out.println("filename is "+filename);
+
 
             String url= UploadUtil.uploadImage(file);
             //url 应该去掉前缀
+            System.out.println("得到的url is "+url);
 
             url=url.substring(pre.length());
-            System.out.println("url is"+url);
+
             Map<String,String> picture=new HashMap<>();
             picture.put("pictureName",filename);
             picture.put("pictureUrl",url);
@@ -56,7 +57,7 @@ public class ScientificPaperPicturesController {
             scientificPaperPictureMapper.insert(new ScientificPaperPicture(username,achievementName,url));
             //同时数据表里面也应该加入信息  uername  成果名字  url
         }
-        return  new R(true,200,"多组图片上传成功",pictureList);
+        return  new R(true,200,"多组文件上传成功",pictureList);
     }
 
     //查询对应用户 对应成果 的图片列表

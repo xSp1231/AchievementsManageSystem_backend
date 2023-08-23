@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     // 拦截：未登录异常 token过期
-    @ExceptionHandler(NotLoginException.class)
+    @ExceptionHandler(NotLoginException.class) //指定捕获 未登录异常
     public R handlerException(NotLoginException e) {
         // 打印堆栈，以供调试
         e.printStackTrace();

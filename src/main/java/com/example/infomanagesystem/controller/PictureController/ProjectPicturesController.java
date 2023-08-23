@@ -28,7 +28,8 @@ import java.util.Map;
 public class ProjectPicturesController {
     @Autowired
     private ProjectPictureMapper projectPictureMapper;
-    public static  final String pre="https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/";
+    //public static  final String pre="https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/";
+    public static  final String pre="https://xspfile.yougi.top/";
     //图片的上传
     @SaCheckLogin
     @PostMapping("/uploadPictures")
@@ -55,7 +56,7 @@ public class ProjectPicturesController {
             projectPictureMapper.insert(new ProjectPicture(username,achievementName,url));
             //同时数据表里面也应该加入信息  uername  成果名字  url
         }
-        return  new R(true,200,"多组图片上传成功",pictureList);
+        return  new R(true,200,"多组文件上传成功",pictureList);
     }
 
     @SaCheckLogin

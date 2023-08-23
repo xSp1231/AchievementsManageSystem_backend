@@ -23,7 +23,8 @@ import java.util.*;
 public class MonographPicturesController {
     @Autowired
     private MonographPictureMapper monographPictureMapper;
-    public static  final String pre="https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/";
+    //public static  final String pre="https://xsp-datastore.oss-cn-chengdu.aliyuncs.com/";
+    public static  final String pre="https://xspfile.yougi.top/";
     //图片的上传
     @SaCheckLogin
     @PostMapping("/uploadPictures")
@@ -50,7 +51,7 @@ public class MonographPicturesController {
             monographPictureMapper.insert(new MonographPicture(username,achievementName,url));
             //同时数据表里面也应该加入信息  uername  成果名字  url
         }
-        return  new R(true,200,"多组图片上传成功",pictureList);
+        return  new R(true,200,"多组文件上传成功",pictureList);
     }
 
     //查询对应用户 对应成果 的图片列表
