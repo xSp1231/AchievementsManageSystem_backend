@@ -72,9 +72,6 @@ public class MonographPicturesController {
         String username=monographPicture.getUsername();
         String achievementName=monographPicture.getAchievementName();
         String url=monographPicture.getUrl();
-        System.out.println("要删除的username is "+username);
-        System.out.println("要删除的achievement  is "+achievementName);
-        System.out.println("要删除的url is "+url);
         QueryWrapper<MonographPicture> q=new QueryWrapper<>();
         q.eq("username",username).eq("achievementName",achievementName).eq("url",url);
         if(monographPictureMapper.delete(q)>0){ //删除单个图片
