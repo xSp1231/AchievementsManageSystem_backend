@@ -16,6 +16,9 @@ import com.example.infomanagesystem.service.StudentService;
 import com.example.infomanagesystem.utils.UploadUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,11 +49,13 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> impleme
     }
 
     @Override
+    @Cacheable(cacheNames = "Reward",key = "#id")  //编辑的时候 查询用户成果信息
     public Reward getRewardById(Integer id) {
         return rewardMapper.selectById(id);
     }
 
     @Override
+    @CacheEvict(cacheNames = "RewardPage", allEntries = true)  //新增的时候 删除SCpage缓存目录下面的所有缓存
     public boolean saveReward(Reward reward) { //如果相同用户名 相同标题已经存在 就不能上传 除非删除
         QueryWrapper<Reward> q=new QueryWrapper<>();
         q.eq("username",reward.getUsername());
@@ -67,6 +72,10 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> impleme
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "Reward", key = "#id"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "RewardPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean deleteReward(Integer id) {
         Reward  reward= rewardMapper.selectById(id);//根据id搜索成果信息
         String username=reward.getUsername();
@@ -85,6 +94,7 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> impleme
     }
 
     @Override
+    @CacheEvict(cacheNames = "RewardPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
     public void deleteBatch(List<Integer> ids) { //根据id批量删除
         for(Integer id:ids){//循环删除
             deleteReward(id);
@@ -92,11 +102,16 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, Reward> impleme
     }
 
     @Override  //编辑信息
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "Reward", key = "#reward.id"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "RewardPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean updateReward(Reward reward) {
         return rewardMapper.updateById(reward)>0;
     }
 
     @Override
+    @Cacheable(cacheNames = "RewardPage",key = "#currentPage+'_'+#pageSize+'_'+#reward.username+'_'+#reward.rewardName+'_'+#reward.status")
     public IPage<Reward> getPage(int currentPage, int pageSize, Reward reward) {
         LambdaQueryWrapper<Reward> q = new LambdaQueryWrapper<>();
         //可以根据什么来查询 username  title  status

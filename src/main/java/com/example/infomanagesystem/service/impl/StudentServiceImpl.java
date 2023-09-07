@@ -12,6 +12,9 @@ import com.example.infomanagesystem.mapper.StudentMapper;
 import com.example.infomanagesystem.service.StudentService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -66,6 +69,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         return studentMapper.selectList(null);
     }
     @Override
+    @CacheEvict(cacheNames = "getPage", allEntries = true)  //增加用户 删除原有的getPage缓存目录下面的所有缓存
     public boolean saveStudent(Student student) { //学生添加 不能使得用户名重复
         String username=student.getUsername();
         QueryWrapper<Student> q=new QueryWrapper<>();
@@ -77,19 +81,25 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         return studentMapper.insert(student)>0; //添加学生
         }
     }
-
+    //删除用户
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "username", key = "#username"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "getPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean deleteStudentByUsername(String username) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username);
         //先删除用户的成果 再删除用户
         StpUtil.logout(username);//强制使得token失效
-        System.out.println("shixiao");
-
         return studentMapper.delete(q) > 0;
     }
 
     @Override  //前端表格会传递 用户名(不可以改动 unique)  密码  姓名 专业信息 账号状态
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "username", key = "#student.username"), //执行删除用户更新时
+            @CacheEvict(cacheNames = "getPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean updateStudent(Student student) {  //修改学生信息  班级 用户名 账号 密码 专业班级  账号状态
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",student.getUsername());
@@ -102,12 +112,19 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         return studentMapper.updateById(student)>0;
     }
 
+
+    //个人页面修改信息 修改完 删除缓存
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "username", key = "#student.username"), //执行删除用户更新时
+            @CacheEvict(cacheNames = "getPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean editStudent(Student student) {
         return studentMapper.updateById(student)>0;
     }
 
     @Override
+    @Cacheable(cacheNames = "username",key = "#username")  //设置缓存空间 以及键的名字  编辑的时候 回显用户信息
     public Student selectStudentByUsername(String username) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.eq("username",username); //编辑学生信息的时候 先要根据username 搜寻用户
@@ -116,7 +133,9 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     }
 
     @Override
+    @Cacheable(cacheNames = "getPage",key="#currentPage+'_'+#pageSize+'_'+#student.username+'_'+#student.major+'_'+#student.name")
     public IPage<Student> getPage(int currentPage, int pageSize,Student student) { //里面写查询条件
+        System.out.println("条件查询");
         LambdaQueryWrapper<Student> q = new LambdaQueryWrapper<>();
         //模糊查询查的是字串 而不是子序列  xs 可以查到xsp sp可以查到xsp  但是xp查不到xsp
         //用户名 major status name  如果前端传递的查询字符串不为空，则在 Student 实体的 username 属性中查找包含该字符串的记录。如果前端没有传递查询字符串，则不添加该查询条件。
@@ -127,10 +146,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         IPage page = new Page(currentPage, pageSize);
         studentMapper.selectPage(page, q); //分页查询条件
         return page;
-
     }
 
+    //批量删除
     @Override
+    @CacheEvict(cacheNames = "getPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
     public void deleteUsers(List<String> usernames) {
         QueryWrapper<Student> q=new QueryWrapper<>();
         q.in("username",usernames);

@@ -17,6 +17,9 @@ import com.example.infomanagesystem.service.StudentService;
 import com.example.infomanagesystem.utils.UploadUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,11 +52,13 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
 
     //删除monograph成果
     @Override
+    @Cacheable(cacheNames = "Monograph",key = "#id")  //编辑的时候 查询用户成果信息
     public Monograph getMonographById(Integer id) {
         return monographMapper.selectById(id);
     }
 
     @Override
+    @CacheEvict(cacheNames = "MonoPage", allEntries = true)  //新增的时候 删除SCpage缓存目录下面的所有缓存
     public boolean saveMonograph(Monograph monograph) { //如果相同用户名 相同标题已经存在 就不能上传 除非删除
         QueryWrapper<Monograph> q=new QueryWrapper<>();
         q.eq("username",monograph.getUsername());
@@ -72,6 +77,10 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "Monograph", key = "#id"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "MonoPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean deleteMonograph(Integer id) {  //删除某一项成果---也需要将对应的img删除
         Monograph  monograph= monographMapper.selectById(id);//根据id搜索成果信息
         //根据成果的username monoName(成果名字) 删除对应的成果信息
@@ -91,6 +100,7 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
     }
     //批量删除成果
     @Override
+    @CacheEvict(cacheNames = "MonoPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
     public void deleteBatch(List<Integer> ids) { //根据id批量删除
 //        QueryWrapper<Monograph> q=new QueryWrapper<>();
 //        q.in("id",ids);
@@ -100,13 +110,17 @@ public class MonographServiceImpl extends ServiceImpl<MonographMapper, Monograph
         }
         //  remove(q); //移除满足条件的所有元素 二者等价
     }
-
     @Override  //编辑信息
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "Monograph", key = "#monograph.id"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "MonoPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean updateMonograph(Monograph monograph) {
         return monographMapper.updateById(monograph)>0;
     }
 
     @Override
+    @Cacheable(cacheNames = "MonoPage",key = "#currentPage+'_'+#pageSize+'_'+#monograph.username+'_'+#monograph.monoName+'_'+#monograph.status")
     public IPage<Monograph> getPage(int currentPage, int pageSize, Monograph monograph) {
         LambdaQueryWrapper<Monograph> q = new LambdaQueryWrapper<>();
         //可以根据什么来查询 username  title  status

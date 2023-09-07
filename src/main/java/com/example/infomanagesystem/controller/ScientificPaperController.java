@@ -16,6 +16,7 @@ import com.example.infomanagesystem.result.R;
 import com.example.infomanagesystem.service.ScientificPaperService;
 import com.example.infomanagesystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

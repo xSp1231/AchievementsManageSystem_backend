@@ -18,6 +18,9 @@ import com.example.infomanagesystem.service.StudentService;
 import com.example.infomanagesystem.utils.UploadUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,11 +50,13 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
+    @Cacheable(cacheNames = "Project",key = "#id")  //编辑的时候 查询用户成果信息
     public Project getProjectById(Integer id) {
         return projectMapper.selectById(id);
     }
 
     @Override
+    @CacheEvict(cacheNames = "ProjectPage", allEntries = true)  //新增的时候 删除SCpage缓存目录下面的所有缓存
     public boolean saveProject(Project project) { //如果相同用户名 相同项目名已经存在 就不能上传 除非删除
         QueryWrapper<Project> q=new QueryWrapper<>();
         q.eq("username",project.getUsername());
@@ -68,6 +73,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "Project", key = "#id"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "ProjectPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean deleteProject(Integer id) {
         Project  project= projectMapper.selectById(id);//根据id搜索成果信息
         //根据成果的username monoName(成果名字) 删除对应的成果信息
@@ -87,6 +96,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
+    @CacheEvict(cacheNames = "ProjectPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
     public void deleteBatch(List<Integer> ids) { //根据id批量删除
         for(Integer id:ids){//循环删除
             deleteProject(id);
@@ -95,11 +105,16 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override  //编辑信息
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "Project", key = "#project.id"), //执行删除用户操作时
+            @CacheEvict(cacheNames = "ProjectPage", allEntries = true)  //删除getPage缓存目录下面的所有缓存
+    })
     public boolean updateProject(Project project) {
         return projectMapper.updateById(project)>0;
     }
 
     @Override
+    @Cacheable(cacheNames = "ProjectPage",key = "#currentPage+'_'+#pageSize+'_'+#project.username+'_'+#project.category+'_'+#project.status+'_'+#project.projectName")
     public IPage<Project> getPage(int currentPage, int pageSize, Project project) {
         LambdaQueryWrapper<Project> q = new LambdaQueryWrapper<>();
         //可以根据什么来查询 username  category  status

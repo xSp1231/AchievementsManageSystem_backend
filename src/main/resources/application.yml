@@ -16,6 +16,19 @@ spring:
       max-request-size: 20MB
   redis:
     port: 6379
+      #password: root123  #redis链接密码
+    lettuce:
+      pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: 100ms
+  cache: #选择缓存类型
+    type: redis
+    #    redis:
+    #      cache-null-values: true
+    #      time-to-live: 100s
+
 
   #邮箱基本配置
   mail:
