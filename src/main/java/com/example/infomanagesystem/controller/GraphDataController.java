@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.infomanagesystem.entity.*;
 import com.example.infomanagesystem.mapper.*;
 import com.example.infomanagesystem.result.R;
+import com.example.infomanagesystem.utils.LoginNumRecord;
 import org.apache.commons.collections.list.AbstractLinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -105,6 +106,22 @@ public class GraphDataController {
         data.add((monographNum+rewardNum+projectNum+scientificNum+patentSoftNum));
         return new R(true,200,"统计面板数据",data);
     }
+
+    @Autowired
+    private LoginNumRecord loginNumRecord;
+    @GetMapping("/addLoginNum") //获取数量
+    public R addLoginNum(){
+        loginNumRecord.addNum();
+        return new R(true,200,"今日登录次数+1");
+    }
+
+    @GetMapping("/LoginCountStatistics") //获取数量
+    public R getPastSevenDaysLoginNum(){
+        return new R(true,200,"获取近七天每日登录人数成功",loginNumRecord.getPastSevenDays());
+    }
+
+
+
 
 
 }
