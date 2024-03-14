@@ -47,6 +47,4 @@ public class Student {
     @ColumnWidth(10)
     private int status=1;   //账号状态 1 可用 0 不可用
 
-
-
 }

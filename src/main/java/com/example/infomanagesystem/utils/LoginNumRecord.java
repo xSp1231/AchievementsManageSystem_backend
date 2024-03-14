@@ -23,7 +23,7 @@ public class LoginNumRecord {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    private static  final  int expireTime=15;//设置15天过期时间
+    private static  final  int expireTime = 15;//设置15天过期时间
     public void addNum() {//+1操作
         LocalDateTime now = LocalDateTime.now();
         String date = now.format(DateTimeFormatter.ofPattern("yyyyMMdd")); //时间格式化 //生成键 当天的日期为键
@@ -37,20 +37,22 @@ public class LoginNumRecord {
         }
     }
 
-    public List<Map<String, Integer>> getPastSevenDays() { //得到近七天的登录数据
-        List<Map<String, Integer>>res=new ArrayList<>();
+    public List<Map<String, String>> getPastSevenDays() { //得到近七天的登录数据
+        List<Map<String, String>>res=new ArrayList<>();
         LocalDate today = LocalDate.now(); //今天的日期
-        for (int i = 0; i < 7; i++) { //获取过去七天的日期 减去指定天数 获得过去的日期
-            Map<String,Integer> map=new HashMap<>();
+        for (int i = 6; i >=0; i--) { //获取过去七天的日期 减去指定天数 获得过去的日期
+            Map<String,String> map=new HashMap<>();
             LocalDate pastDate = today.minusDays(i);
             String date=pastDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             String key = "NumOf" + pastDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")); //生成键=>之后根据键 来获得对应的天数
             if (stringRedisTemplate.opsForValue().get(key) == null) { //如果某一天没有登录 没有设置 键 值 。那么直接 设置 其键值为0
                 stringRedisTemplate.opsForValue().set(key, "0",expireTime,TimeUnit.DAYS);
-                map.put(date,0);
+                map.put("date",date);
+                map.put("num","0");
             }
             else {
-                map.put(date,Integer.parseInt(stringRedisTemplate.opsForValue().get(key)));
+                map.put("date",date);
+                map.put("num",stringRedisTemplate.opsForValue().get(key));
             }
             res.add(map);
         }

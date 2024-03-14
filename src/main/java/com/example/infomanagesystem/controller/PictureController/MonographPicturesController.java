@@ -34,7 +34,6 @@ public class MonographPicturesController {
         System.out.println("上传图片的username is  "+username);
         System.out.println("list is "+ files.length);
         List<Map<String,String>> pictureList=new ArrayList<>();
-
         for (MultipartFile file : files) {
             String filename = file.getOriginalFilename();  //获取上传图片的文件名，包含后缀
             System.out.println("filename is "+filename);
@@ -81,10 +80,4 @@ public class MonographPicturesController {
         }
         return new R(false,404,"删除图片失败");
     }
-
-
-
-
-
-
 }
