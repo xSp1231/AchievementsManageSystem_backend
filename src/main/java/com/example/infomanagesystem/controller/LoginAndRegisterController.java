@@ -89,6 +89,8 @@ public class LoginAndRegisterController {
         String name=userDTO.getName();
         String major=userDTO.getMajor();
         String email=userDTO.getEmail();
+        String avtar = userDTO.getAvtar();
+        String area = userDTO.getArea();
         int status=userDTO.getStatus();
         if("学生".equals(role)){
             Student st=new Student(); //状态默认为1 账号可以使用
@@ -98,6 +100,9 @@ public class LoginAndRegisterController {
             st.setRole(role);
             st.setMajor(major);
             st.setEmail(email);
+            st.setAvtar(avtar);
+            st.setArea(area);
+            System.out.println(st);
             //st.setStatus(status);
             if(studentService.register(st)){ //true
                 return new R(true,201,"学生用户添加成功");

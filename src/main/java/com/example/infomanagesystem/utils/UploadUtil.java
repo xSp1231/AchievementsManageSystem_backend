@@ -37,7 +37,7 @@ public class UploadUtil {
         ossClient.putObject("xsp-datastore", fileName, file.getInputStream()); //三个参数 "oss的bucket名字"
         ossClient.shutdown();//关闭
         // oss客户端对象
-        return ALI_DOMAIN + fileName;//访问路劲
+        return ALI_DOMAIN + fileName;//访问路径
     }
     public static String deleteFile(String fileName) {
         //oss客户端对象

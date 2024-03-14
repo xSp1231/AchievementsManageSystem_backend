@@ -109,19 +109,21 @@ public class GraphDataController {
 
     @Autowired
     private LoginNumRecord loginNumRecord;
+
+    @SaCheckLogin
     @GetMapping("/addLoginNum") //获取数量
     public R addLoginNum(){
         loginNumRecord.addNum();
         return new R(true,200,"今日登录次数+1");
     }
 
+    @GetMapping("/getdata")
+    public R getData(){
+        return R.success();
+    }
     @GetMapping("/LoginCountStatistics") //获取数量
     public R getPastSevenDaysLoginNum(){
         return new R(true,200,"获取近七天每日登录人数成功",loginNumRecord.getPastSevenDays());
     }
-
-
-
-
 
 }

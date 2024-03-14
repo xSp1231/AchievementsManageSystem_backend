@@ -29,7 +29,6 @@ import java.util.List;
  */
 @Service
 public class PatentSoftServiceImpl extends ServiceImpl<PatentSoftMapper, PatentSoft>  implements PatentSoftService {
-
     @Autowired
     private PatentSoftMapper patentSoftMapper;
     @Autowired

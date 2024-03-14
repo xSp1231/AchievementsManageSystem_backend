@@ -46,7 +46,6 @@ public class Student {
     @ExcelProperty(value = "帐号状态")
     @ColumnWidth(10)
     private int status=1;   //账号状态 1 可用 0 不可用
-
-
-
+    private String avtar;
+    private String area;
 }
