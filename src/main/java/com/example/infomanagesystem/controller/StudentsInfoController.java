@@ -29,8 +29,6 @@ import java.util.Objects;
  * @Author xushupeng
  * @Date 2023-07-12 21:00
  */
-
-
 @RestController
 @CrossOrigin  //跨域
 public class StudentsInfoController {
@@ -103,7 +101,6 @@ public class StudentsInfoController {
             return new R(false,409,"该学生用户已存在,用户名唯一");//409 Conflict：表示请求与服务器上现有的资源冲突，例如请求创建一个已经存在的资源。
         }
     }
-
     //已经修改
     @SaCheckLogin
     @DeleteMapping("/student/{username}") //个人中心页面学生注销  用户页面管理员通过用户名删除 //http://localhost:8080/student/test6
@@ -111,36 +108,6 @@ public class StudentsInfoController {
         System.out.println("要删除的username is "+username);       // @PathVarible  是针对于在url上面进行传参  url拼接
         String LoginUsername=String.valueOf(StpUtil.getLoginId());
         System.out.println("登陆者的username is"+LoginUsername);
-//        if(Objects.equals(username, LoginUsername) &&"student".equals(managerService.getRoleByUsername(username))){//操作者为本人且为学生
-//           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
-//               monographService.deleteAllMonographOfUsername(username);
-//               patentSoftService.deleteAllPatentSoftOfUsername(username);
-//               rewardService.deleteAllRewardOfUsername(username);
-//               scientificPaperService.deleteAllScientificPaperOfUsername(username);
-//               projectService.deleteAllProjectOfUsername(username);
-//               return new R(true,204,"学生注销成功!");//防止学生访问管理员页面 删除个人信息 之后可以看到其他人的成果信息
-//           }
-//           else{
-//               return  new R(false,404,"学生"+username+"删除失败!");
-//           }
-//       }
-//       else if("admin".equals(managerService.getRoleByUsername(LoginUsername))) {//如果操作者为管理员 就可以随便删除学生
-//           if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
-//               monographService.deleteAllMonographOfUsername(username);
-//               patentSoftService.deleteAllPatentSoftOfUsername(username);
-//               rewardService.deleteAllRewardOfUsername(username);
-//               scientificPaperService.deleteAllScientificPaperOfUsername(username);
-//               projectService.deleteAllProjectOfUsername(username);
-//               return new R(true,204,"学生"+username+"删除成功!");
-//           }
-//           else{
-//               return  new R(false,404,"学生"+username+"删除失败!");
-//           }
-//       }
-//       else{
-//           System.out.println("删除时候的异常情况");
-//           return  new R(false,404,"异常情况");
-//       }
         if(studentService.deleteStudentByUsername(username)){ //删除成功的情况下，通常会返回状态码 204 No Content。这表示请求已成功完成
             monographService.deleteAllMonographOfUsername(username);
             patentSoftService.deleteAllPatentSoftOfUsername(username);

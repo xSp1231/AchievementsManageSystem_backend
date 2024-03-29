@@ -17,6 +17,8 @@ import java.util.UUID;
 public class UploadUtil {
     //阿里oss域名
     public static final String ALI_DOMAIN = "https://xspfile.yougi.top/";//访问域名
+
+
     //生成文件名
     public static final String endPoint = "http://oss-cn-chengdu.aliyuncs.com";
     // ID // LTAI5t9zF4K3iz4GPFDjfVQB

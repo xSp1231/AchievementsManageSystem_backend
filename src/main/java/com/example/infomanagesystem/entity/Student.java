@@ -42,9 +42,14 @@ public class Student {
     @ColumnWidth(10)
     private String email;
 
+    @ExcelProperty(value = "地区")
+    @ColumnWidth(10)
+    private String  area ="";  //地区
+
 
     @ExcelProperty(value = "帐号状态")
     @ColumnWidth(10)
     private int status=1;   //账号状态 1 可用 0 不可用
 
+    private String avtar="https://xspfile.yougi.top/%E5%B1%B1%E5%B7%9D7bb4d9cbbc8441c99ecdabf1346ac001.jpg";   // 头像
 }
