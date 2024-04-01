@@ -14,6 +14,7 @@ import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.result.R;
 import com.example.infomanagesystem.service.*;
 import com.example.infomanagesystem.utils.JwtUtils;
+import com.example.infomanagesystem.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -235,5 +236,10 @@ public class StudentsInfoController {
         excelWriter.finish();
         outputStream.flush();
     }
-
+//  http://localhost:8080/upAvtar
+    @PostMapping("/upAvtar")
+    public String upImg(MultipartFile file) throws IOException {
+        System.out.println(file);
+        return UploadUtil.uploadImage(file);
+    }
 }
