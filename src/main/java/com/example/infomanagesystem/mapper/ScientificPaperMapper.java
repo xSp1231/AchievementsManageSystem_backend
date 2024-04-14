@@ -14,5 +14,6 @@ import org.apache.ibatis.annotations.Select;
 public interface ScientificPaperMapper extends BaseMapper<ScientificPaper> {
     @Select("select count(*) from t_scientific") //sql语句应该为双引号
     int getScientificNum();
-
+    @Select("select count(*) from t_scientific where status = #{status} and username = #{username}")
+    int getStatus(String status,String username);
 }

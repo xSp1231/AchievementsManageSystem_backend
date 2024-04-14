@@ -13,4 +13,6 @@ import org.apache.ibatis.annotations.Select;
 public interface MonographMapper extends BaseMapper<Monograph> {
     @Select("select count(*) from t_monograph") //sql语句应该为双引号
     int getMonographNum();
+    @Select("select count(*) from t_monograph where status = #{status} and username = #{username}")
+    int getStatus(String status,String username);
 }

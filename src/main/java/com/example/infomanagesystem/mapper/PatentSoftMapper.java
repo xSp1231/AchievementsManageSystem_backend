@@ -13,4 +13,6 @@ import org.apache.ibatis.annotations.Select;
 public interface PatentSoftMapper extends BaseMapper<PatentSoft> {
     @Select("select count(*) from t_patentsoft") //sql语句应该为双引号
     int getPatentsoftNum();
+    @Select("select count(*) from t_patentsoft where status = #{status} and username = #{username}")
+    int getStatus(String status,String username);
 }

@@ -13,4 +13,6 @@ import org.apache.ibatis.annotations.Select;
 public interface ProjectMapper  extends BaseMapper<Project> {
     @Select("select count(*) from t_project") //sql语句应该为双引号
     int getProjectNum();
+    @Select("select count(*) from t_project where status = #{status} and username = #{username}")
+    int getStatus(String status,String username);
 }

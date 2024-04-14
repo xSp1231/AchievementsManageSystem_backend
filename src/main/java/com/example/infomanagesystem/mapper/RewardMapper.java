@@ -13,5 +13,6 @@ import org.apache.ibatis.annotations.Select;
 public interface RewardMapper extends BaseMapper<Reward> {
     @Select("select count(*) from t_reward") //sql语句应该为双引号
     int getRewardNum();
-
+    @Select("select count(*) from t_reward where status = #{status} and username = #{username}")
+    int getStatus(String status,String username);
 }

@@ -52,8 +52,37 @@ public class GraphDataController {
         return new R(true,200,"总体饼图数据",data);
     }
     @SaCheckLogin
-    @GetMapping("/personalPieData")
+    @GetMapping("/personalStatusPieData")
     public R getPersonalData() {
+        String refuse = "拒绝";
+        String accept = "接收";
+        String audit  = "审核";
+        String username= (String) StpUtil.getLoginId();
+        // 构造饼图数据
+        List<Map<String, Object>> data = new ArrayList<>();
+        System.out.println("personalData is "+data);
+//        data.add(createDataItem("失败的科技", scientificPaperMapper.getStatus(refuse,username)));
+//        data.add(createDataItem("接受的科技", scientificPaperMapper.getStatus(accept,username)));
+//        data.add(createDataItem("审核的科技", scientificPaperMapper.getStatus(audit,username)));
+//        data.add(createDataItem("失败的专著", monographMapper.getStatus(refuse,username)));
+//        data.add(createDataItem("接受的专著", monographMapper.getStatus(accept,username)));
+//        data.add(createDataItem("审核的专著", monographMapper.getStatus(audit,username)));
+//        data.add(createDataItem("失败的专利软著", patentSoftMapper.getStatus(refuse,username)));
+//        data.add(createDataItem("接受的专利软著", patentSoftMapper.getStatus(accept,username)));
+//        data.add(createDataItem("审核的专利软著", patentSoftMapper.getStatus(audit,username)));
+//        data.add(createDataItem("失败的项目", projectMapper.getStatus(refuse,username)));
+//        data.add(createDataItem("接受的项目", projectMapper.getStatus(accept,username)));
+//        data.add(createDataItem("审核的项目", projectMapper.getStatus(audit,username)));
+//        data.add(createDataItem("失败的奖励", rewardMapper.getStatus(refuse,username)));
+//        data.add(createDataItem("接受的奖励", rewardMapper.getStatus(accept,username)));
+//        data.add(createDataItem("审核的奖励", rewardMapper.getStatus(audit,username)));
+        data.add(createDataItem("拒绝的成果", rewardMapper.getStatus(refuse,username)+scientificPaperMapper.getStatus(refuse,username)+monographMapper.getStatus(refuse,username)+patentSoftMapper.getStatus(refuse,username)+projectMapper.getStatus(refuse,username)));
+        data.add(createDataItem("接受的成果", rewardMapper.getStatus(accept,username)+scientificPaperMapper.getStatus(accept,username)+monographMapper.getStatus(accept,username)+patentSoftMapper.getStatus(accept,username)+projectMapper.getStatus(accept,username)));;
+        data.add(createDataItem("审核的成果", rewardMapper.getStatus(audit,username)+scientificPaperMapper.getStatus(audit,username)+monographMapper.getStatus(audit,username)+patentSoftMapper.getStatus(audit,username)+projectMapper.getStatus(audit,username)));;
+        return new R(true,200,"用户饼图数据",data);
+    }
+    @GetMapping("/personalPieData")
+    public R getPersonalStatusData() {
         String username= (String) StpUtil.getLoginId();
         QueryWrapper<ScientificPaper> q1= new QueryWrapper<>();
         q1.eq("username",username);
@@ -75,7 +104,6 @@ public class GraphDataController {
         System.out.println("personalData is "+data);
         return new R(true,200,"用户饼图数据",data);
     }
-
     private Map<String, Object> createDataItem(String name, int value) {
         Map<String, Object> item = new HashMap<>();
         item.put("name", name);

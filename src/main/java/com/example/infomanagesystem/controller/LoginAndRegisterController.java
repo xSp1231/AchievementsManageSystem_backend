@@ -1,9 +1,11 @@
 package com.example.infomanagesystem.controller;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.example.infomanagesystem.entity.LoginTime;
 import com.example.infomanagesystem.entity.Manager;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.entity.UserDTO;
+import com.example.infomanagesystem.mapper.LoginTimeMapper;
 import com.example.infomanagesystem.result.R;
 import com.example.infomanagesystem.service.ManagerService;
 import com.example.infomanagesystem.service.StudentService;
@@ -13,6 +15,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 //登录接口
@@ -25,8 +29,8 @@ public class LoginAndRegisterController {
     private ManagerService managerService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
-
+    @Autowired
+    private LoginTimeMapper loginTimeMapper;
     @GetMapping("/info")
     public String  info(){
         System.out.println("用户是否登录"+StpUtil.isLogin());
@@ -50,7 +54,29 @@ public class LoginAndRegisterController {
                   if(studentService.checkStatus(username)==0){
                       return new R(false,404,"该账号不能使用,请联系管理员","登录失败");
                   }
+                  LocalDate localDate = LocalDate.now();
+                  LoginTime loginTime = new LoginTime();
+                  loginTime.setUsername(userDTO.getUsername());
+                  loginTime.setLoginTime(String.valueOf(localDate));
+                  String loginTimes = String.valueOf(localDate);
                   //账号能使用  status==1  进行登录  删除验证码
+                  int num = loginTimeMapper.GetLoginNumber(username);
+                  if(num==0){
+                      loginTime.setNum("1");
+                      loginTimeMapper.insert(loginTime);
+                  }
+                  else{
+                      int TimeNum = loginTimeMapper.GetTrueLoginNumber(username,loginTimes);
+                      Integer nums = Integer.valueOf(TimeNum);
+                      System.out.println("修改之前的登录数"+nums);
+                      nums++;
+                      String NewNum = String.valueOf(nums);
+                      System.out.println(username);
+                      System.out.println("修改之后的登录数"+NewNum);
+                      System.out.println(loginTimes);
+                      Boolean flag = loginTimeMapper.updateByNum(username,NewNum,loginTimes);
+                      System.out.println("你看看修改成功没有呢"+flag);
+                  }
                   stringRedisTemplate.delete(UserVerifyCodeKey);
                   StpUtil.login(username);
                   SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
@@ -75,11 +101,8 @@ public class LoginAndRegisterController {
                   return new R(false,404,"管理员用户不存在!请检查用户名或者密码是否正确");
               }
           }
-
         }
     }
-
-
     @PostMapping("/register")
     public R register(@RequestBody UserDTO userDTO){
         String role=userDTO.getRole();//获取身份
