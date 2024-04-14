@@ -4,101 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f94be20-080b-4deb-8286-0b6faa7c41cb" name="更改" comment="后端修改完成1">
-      <changelist_data name="xushupeng" email="2789347466@qq.com" />
+    <list default="true" id="9f94be20-080b-4deb-8286-0b6faa7c41cb" name="更改" comment="头像上传">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/MessageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/entity/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/mapper/MessageMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/service/MessageService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/service/impl/MessageServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/utils/MyFunction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d2d66720-f185-4151-be88-17095482c60d.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/InfoManageSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/InfoManageSystemApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/MonographController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/MonographController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/PatentSoftController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/PatentSoftController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/ProjectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/ProjectController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/RewardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/RewardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/StudentsInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/StudentsInfoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/ScientificPaperController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/infomanagesystem/controller/ScientificPaperController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/InfoManageSystemApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/InfoManageSystemApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/config/MPConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/config/MPConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/config/SaTokenConfigure.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/config/SaTokenConfigure.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/config/redisConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/config/redisConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/GraphDataController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/GraphDataController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/LoginAndRegisterController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/LoginAndRegisterController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/MonographController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/MonographController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/MonographController$MonographListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/MonographController$MonographListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/MonographController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/MonographController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/NoticeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/NoticeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PasswordRecoveryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PasswordRecoveryController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PatentSoftController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PatentSoftController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PatentSoftController$PatentSoftListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PatentSoftController$PatentSoftListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PatentSoftController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PatentSoftController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/MonographPicturesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/MonographPicturesController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/PatentSoftPicturesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/PatentSoftPicturesController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/ProjectPicturesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/ProjectPicturesController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/RewardPicturesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/RewardPicturesController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/ScientificPaperPicturesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/PictureController/ScientificPaperPicturesController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ProjectController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ProjectController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ProjectController$ProjectListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ProjectController$ProjectListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ProjectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ProjectController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/RewardController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/RewardController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/RewardController$RewardListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/RewardController$RewardListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/RewardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/RewardController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ScientificPaperController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ScientificPaperController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ScientificPaperController$ScientificPaperListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ScientificPaperController$ScientificPaperListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ScientificPaperController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/ScientificPaperController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/SendMailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/SendMailController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/StudentsInfoController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/StudentsInfoController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/StudentsInfoController$StudentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/StudentsInfoController$StudentListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/StudentsInfoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/StudentsInfoController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/VerifyCodeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/controller/VerifyCodeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Manager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Manager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Monograph.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Monograph.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Notice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Notice.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PatentSoft.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PatentSoft.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/MonographPicture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/MonographPicture.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/PatentSoftPicture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/PatentSoftPicture.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/ProjectPicture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/ProjectPicture.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/RewardPicture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/RewardPicture.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/ScientificPaperPicture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/PictureEntity/ScientificPaperPicture.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Project.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Project.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Reward.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Reward.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/ScientificPaper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/ScientificPaper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/Student.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/UserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/entity/UserDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/interceptor/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/interceptor/GlobalExceptionHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/ManagerMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/ManagerMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/MonographMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/MonographMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/NoticeMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/NoticeMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PatentSoftMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PatentSoftMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/MonographPictureMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/MonographPictureMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/PatentSoftPictureMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/PatentSoftPictureMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/ProjectPictureMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/ProjectPictureMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/RewardPictureMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/RewardPictureMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/ScientificPaperPictureMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/PictureMapper/ScientificPaperPictureMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/ProjectMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/ProjectMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/RewardMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/RewardMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/ScientificPaperMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/ScientificPaperMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/StudentMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/mapper/StudentMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/result/R.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/result/R.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/saToken/StpInterfaceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/saToken/StpInterfaceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/ManagerService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/ManagerService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/MonographService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/MonographService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/NoticeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/NoticeService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/PatentSoftService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/PatentSoftService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/ProjectService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/ProjectService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/RewardService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/RewardService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/ScientificPaperService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/ScientificPaperService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/StudentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/StudentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/MailService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/MailService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/ManagerServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/ManagerServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/MonographServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/MonographServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/NoticeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/NoticeServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/PatentSoftServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/PatentSoftServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/ProjectServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/ProjectServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/RewardServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/RewardServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/ScientificPaperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/ScientificPaperImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/StudentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/service/impl/StudentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/utils/JwtUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/utils/JwtUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/utils/LoginNumRecord.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/utils/LoginNumRecord.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/utils/UploadUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/infomanagesystem/utils/UploadUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/infomanagesystem/InfoManageSystemApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/infomanagesystem/InfoManageSystemApplicationTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,35 +70,45 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.InfoManageSystemApplication.executor": "Run",
-    "WebServerToolWindowFactoryState": "false",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "项目",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "spring.configuration.checksum": "e046f0fbae2655356dcda6837aa00857",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.InfoManageSystemApplication.executor&quot;: &quot;Run&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/springboot/InfoManageSystem_backend/src/main/java/com/example/infomanagesystem/controller&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;e046f0fbae2655356dcda6837aa00857&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\springboot\InfoManageSystem_backend\src\main\java\com\example\infomanagesystem\controller" />
+      <recent name="D:\springboot\InfoManageSystem_backend\src\main\java\com\example\infomanagesystem\service\impl" />
+      <recent name="D:\springboot\InfoManageSystem_backend\src\main\java\com\example\infomanagesystem\service" />
+      <recent name="D:\springboot\InfoManageSystem_backend\src\main\java\com\example\infomanagesystem\mapper" />
+      <recent name="D:\springboot\InfoManageSystem_backend\src\main\java\com\example\infomanagesystem\entity" />
+    </key>
+  </component>
   <component name="RunManager" selected="Spring Boot.InfoManageSystemApplication">
     <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.infomanagesystem.test" />
@@ -215,6 +157,11 @@
       <workItem from="1711785709397" duration="1209000" />
       <workItem from="1711802407626" duration="5523000" />
       <workItem from="1711896369955" duration="1513000" />
+      <workItem from="1711932638250" duration="58000" />
+      <workItem from="1711945996583" duration="1898000" />
+      <workItem from="1711985921858" duration="2703000" />
+      <workItem from="1712154064122" duration="3261000" />
+      <workItem from="1713014421458" duration="5531000" />
     </task>
     <task id="LOCAL-00001" summary="后端修改完成1">
       <option name="closed" value="true" />
@@ -224,7 +171,14 @@
       <option name="project" value="LOCAL" />
       <updated>1711810419373</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="头像上传">
+      <created>1711932687603</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1711932687603</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,7 +198,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="统计每日登录人数接口完成" />
     <MESSAGE value="后端修改完成1" />
-    <option name="LAST_COMMIT_MESSAGE" value="后端修改完成1" />
+    <MESSAGE value="头像上传" />
+    <option name="LAST_COMMIT_MESSAGE" value="头像上传" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -6,7 +6,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost/infomanagesystem?serverTimezone=UTC  #修改端口
       username: root  #本地数据库的username  password
-      password: 362305
+      password: root123
   servlet:     #
     multipart:
       enabled: true

@@ -10,11 +10,14 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.example.infomanagesystem.entity.Message;
 import com.example.infomanagesystem.entity.ScientificPaper;
 import com.example.infomanagesystem.entity.Student;
 import com.example.infomanagesystem.result.R;
+import com.example.infomanagesystem.service.MessageService;
 import com.example.infomanagesystem.service.ScientificPaperService;
 import com.example.infomanagesystem.utils.JwtUtils;
+import com.example.infomanagesystem.utils.MyFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +39,8 @@ import java.util.List;
 public class ScientificPaperController {
     @Autowired
     private ScientificPaperService scientificPaperService;
-
+    @Autowired
+    private MessageService messageService;
     @SaCheckLogin
     @SaCheckRole("admin")
     @GetMapping("/getAll")
@@ -109,6 +113,29 @@ public class ScientificPaperController {
     @SaCheckLogin
     @PostMapping("/update")
     public R updateStudent(@RequestBody ScientificPaper scientificPaper){
+        //管理员审核更新成果的时候
+        if(scientificPaper.getStatus().equals("拒绝")){
+            Message message = new Message();
+            message.setMessage(scientificPaper.getRefuseInfo());//设置拒绝消息
+            message.setUsername(scientificPaper.getUsername());
+            message.setStatus(scientificPaper.getStatus()); //成果状态 拒绝 接收 。。
+            message.setProject("科技论文表");//成果属于那张表
+            message.setName(scientificPaper.getTitle()); //获取成果名
+            message.setIsreading("0");//未读
+            message.setAudittime(MyFunction.getCurrentDateTime());
+            messageService.save(message);
+        }
+        if(scientificPaper.getStatus().equals("接收")){
+            Message message = new Message();
+            message.setMessage("成果审核成功");//设置拒绝消息
+            message.setUsername(scientificPaper.getUsername());
+            message.setStatus(scientificPaper.getStatus()); //成果状态 拒绝 接收 。。
+            message.setProject("科技论文表");//成果属于那张表
+            message.setName(scientificPaper.getTitle()); //获取成果名
+            message.setIsreading("0");//未读
+            message.setAudittime(MyFunction.getCurrentDateTime());
+            messageService.save(message);
+        }
         //用户名 角色 不能修改
         if(scientificPaperService.updateScientificPaper(scientificPaper)){
             return new R(true,200,"修改科技成果信息成功,等待审核");

@@ -2,6 +2,7 @@ package com.example.infomanagesystem.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -10,11 +11,14 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
 
+import com.example.infomanagesystem.entity.Message;
 import com.example.infomanagesystem.entity.PatentSoft;
 import com.example.infomanagesystem.result.R;
 
+import com.example.infomanagesystem.service.MessageService;
 import com.example.infomanagesystem.service.PatentSoftService;
 import com.example.infomanagesystem.utils.JwtUtils;
+import com.example.infomanagesystem.utils.MyFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +39,8 @@ import java.util.List;
 public class PatentSoftController {
     @Autowired
     private PatentSoftService patentSoftService;
-
+    @Autowired
+    private MessageService messageService;
     @SaCheckLogin
     @SaCheckRole("admin")
     @GetMapping("/getAll")
@@ -51,23 +56,12 @@ public class PatentSoftController {
         return new R(true,200,"分页信息",patentSoftService.getPage(currentPage,pageSize,patentSoft));
     }
 
-    @SaCheckLogin
-    @GetMapping("/getUserInfo")   //没有使用该方法  学生修改个人成果信息的时候 先要获取该学生的信息 前端携带token
-    public R getUserInfo(HttpServletRequest request){
-        // 获取 Authorization 头部的值
-        String token = request.getHeader("Authorization").substring(7);
-        if(JwtUtils.validateToken(token)){
-            System.out.println("jwt正确");
-            String username=JwtUtils.getUsernameFromToken(token);
-            String role=JwtUtils.getRoleFromToken(token);
-            System.out.println(" jwt  username "+username);
-            System.out.println(" jwt  role "+role);
-            return new R(true,200,"获得登录者成果信息",patentSoftService.getUserPatentSoft(username));
-        }
-        else{
-            System.out.println("jwt过期或错误");
-            return new R(false,400,"jwt过期或错误");
-        }
+    @GetMapping("/getUserInfo")   // 获取该学生的科技论文表  前端携带token
+    public R getUserScientificPaper() {
+        System.out.println("个人信息会话号码(账号)"+ StpUtil.getLoginId());
+        String username= (String) StpUtil.getLoginId();
+        //之后根据username 获取相应的列表
+        return new R(true,200,"获得登录者的成果信息",patentSoftService.getUserPatentSoft(username));
     }
     //获取编辑时的成果信息
     @SaCheckLogin
@@ -117,6 +111,29 @@ public class PatentSoftController {
     @SaCheckLogin
     @PostMapping("/update")
     public R updatePatentSoft(@RequestBody PatentSoft patentSoft){
+        //管理员审核更新成果的时候
+        if(patentSoft.getStatus().equals("拒绝")){
+            Message message = new Message();
+            message.setMessage(patentSoft.getRefuseInfo());//设置拒绝消息
+            message.setUsername(patentSoft.getUsername());
+            message.setStatus(patentSoft.getStatus()); //成果状态 拒绝 接收 。。
+            message.setProject("专利软著表");//成果属于那张表
+            message.setName(patentSoft.getName()); //获取成果名
+            message.setIsreading("0");//未读
+            message.setAudittime(MyFunction.getCurrentDateTime());
+            messageService.save(message);
+        }
+        if(patentSoft.getStatus().equals("接收")){
+            Message message = new Message();
+            message.setMessage("成果审核成功");//设置拒绝消息
+            message.setUsername(patentSoft.getUsername());
+            message.setStatus(patentSoft.getStatus()); //成果状态 拒绝 接收 。。
+            message.setProject("专利软著表");//成果属于那张表
+            message.setName(patentSoft.getName()); //获取成果名
+            message.setIsreading("0");//未读
+            message.setAudittime(MyFunction.getCurrentDateTime());
+            messageService.save(message);
+        }
         //用户名 角色 不能修改
         if(patentSoftService.updatePatentSoft(patentSoft)){
             return new R(true,200,"修改专利/软著成果信息成功,等待审核");
