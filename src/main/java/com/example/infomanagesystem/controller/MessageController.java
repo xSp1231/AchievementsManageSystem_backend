@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +38,6 @@ public class MessageController {
     @DeleteMapping("/{id}")
     public R deleteData(@PathVariable Integer id){
         int TrueId = messageMapper.deleteById(id);
-        return new R(true,200,"删除那个id",TrueId);
+        return new R(true,200,"删除成功",TrueId);
     }
 }

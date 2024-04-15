@@ -15,4 +15,6 @@ public interface PatentSoftMapper extends BaseMapper<PatentSoft> {
     int getPatentsoftNum();
     @Select("select count(*) from t_patentsoft where status = #{status} and username = #{username}")
     int getStatus(String status,String username);
+    @Select("select count(*) from t_patentsoft  where status = #{status}")
+    int getAllStatus(String status);
 }

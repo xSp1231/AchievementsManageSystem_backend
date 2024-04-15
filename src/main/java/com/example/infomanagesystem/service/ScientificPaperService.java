@@ -34,4 +34,5 @@ public interface ScientificPaperService extends IService <ScientificPaper>{
 
     Boolean deleteAllScientificPaperOfUsername(String username);
 
+
 }

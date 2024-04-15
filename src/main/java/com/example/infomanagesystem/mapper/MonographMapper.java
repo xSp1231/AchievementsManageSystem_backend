@@ -15,4 +15,7 @@ public interface MonographMapper extends BaseMapper<Monograph> {
     int getMonographNum();
     @Select("select count(*) from t_monograph where status = #{status} and username = #{username}")
     int getStatus(String status,String username);
+
+    @Select("select count(*) from t_monograph  where status = #{status}")
+    int getAllStatus(String status);
 }

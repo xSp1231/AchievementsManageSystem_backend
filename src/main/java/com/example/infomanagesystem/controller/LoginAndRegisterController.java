@@ -66,8 +66,7 @@ public class LoginAndRegisterController {
                       loginTimeMapper.insert(loginTime);
                   }
                   else{
-                      int TimeNum = loginTimeMapper.GetTrueLoginNumber(username,loginTimes);
-                      Integer nums = Integer.valueOf(TimeNum);
+                      Integer nums = loginTimeMapper.GetTrueLoginNumber(username,loginTimes);
                       System.out.println("修改之前的登录数"+nums);
                       nums++;
                       String NewNum = String.valueOf(nums);
@@ -150,5 +149,14 @@ public class LoginAndRegisterController {
         else{
            return R.error();
         }
+    }
+
+    @GetMapping("/getLoginMessage") // 获取用户接收的消息  前端携带token
+    public R getLoginMessage() {
+        String username= (String) StpUtil.getLoginId();
+        System.out.println("进入了这个接口吗");
+        System.out.println(loginTimeMapper.GetLoginMessage(username));
+        //之后根据username 获取相应的列表
+        return new R(true,200,"获得登录者的专著信息", loginTimeMapper.GetLoginMessage(username));
     }
 }

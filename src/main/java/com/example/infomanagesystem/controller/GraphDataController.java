@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author xushupeng
@@ -61,26 +63,13 @@ public class GraphDataController {
         // 构造饼图数据
         List<Map<String, Object>> data = new ArrayList<>();
         System.out.println("personalData is "+data);
-//        data.add(createDataItem("失败的科技", scientificPaperMapper.getStatus(refuse,username)));
-//        data.add(createDataItem("接受的科技", scientificPaperMapper.getStatus(accept,username)));
-//        data.add(createDataItem("审核的科技", scientificPaperMapper.getStatus(audit,username)));
-//        data.add(createDataItem("失败的专著", monographMapper.getStatus(refuse,username)));
-//        data.add(createDataItem("接受的专著", monographMapper.getStatus(accept,username)));
-//        data.add(createDataItem("审核的专著", monographMapper.getStatus(audit,username)));
-//        data.add(createDataItem("失败的专利软著", patentSoftMapper.getStatus(refuse,username)));
-//        data.add(createDataItem("接受的专利软著", patentSoftMapper.getStatus(accept,username)));
-//        data.add(createDataItem("审核的专利软著", patentSoftMapper.getStatus(audit,username)));
-//        data.add(createDataItem("失败的项目", projectMapper.getStatus(refuse,username)));
-//        data.add(createDataItem("接受的项目", projectMapper.getStatus(accept,username)));
-//        data.add(createDataItem("审核的项目", projectMapper.getStatus(audit,username)));
-//        data.add(createDataItem("失败的奖励", rewardMapper.getStatus(refuse,username)));
-//        data.add(createDataItem("接受的奖励", rewardMapper.getStatus(accept,username)));
-//        data.add(createDataItem("审核的奖励", rewardMapper.getStatus(audit,username)));
         data.add(createDataItem("拒绝的成果", rewardMapper.getStatus(refuse,username)+scientificPaperMapper.getStatus(refuse,username)+monographMapper.getStatus(refuse,username)+patentSoftMapper.getStatus(refuse,username)+projectMapper.getStatus(refuse,username)));
         data.add(createDataItem("接受的成果", rewardMapper.getStatus(accept,username)+scientificPaperMapper.getStatus(accept,username)+monographMapper.getStatus(accept,username)+patentSoftMapper.getStatus(accept,username)+projectMapper.getStatus(accept,username)));;
         data.add(createDataItem("审核的成果", rewardMapper.getStatus(audit,username)+scientificPaperMapper.getStatus(audit,username)+monographMapper.getStatus(audit,username)+patentSoftMapper.getStatus(audit,username)+projectMapper.getStatus(audit,username)));;
         return new R(true,200,"用户饼图数据",data);
     }
+
+    @SaCheckLogin
     @GetMapping("/personalPieData")
     public R getPersonalStatusData() {
         String username= (String) StpUtil.getLoginId();
@@ -104,7 +93,7 @@ public class GraphDataController {
         System.out.println("personalData is "+data);
         return new R(true,200,"用户饼图数据",data);
     }
-    private Map<String, Object> createDataItem(String name, int value) {
+    private Map<String, Object> createDataItem(String name, long value) {
         Map<String, Object> item = new HashMap<>();
         item.put("name", name);
         item.put("value", value);
@@ -134,6 +123,88 @@ public class GraphDataController {
         data.add((monographNum+rewardNum+projectNum+scientificNum+patentSoftNum));
         return new R(true,200,"统计面板数据",data);
     }
+
+    //总体可视化相关接口
+    //1 获取各个地区人数分布数据 {name: "北京",value: 20,},
+    @SaCheckLogin
+    @GetMapping("/getAreaNum")
+    public R getAreaNum(){
+        List<Student> list=studentMapper.selectList(null);
+        Map<String, Long> areaCountMap = list.stream().collect(Collectors.groupingBy(Student::getArea, Collectors.counting()));
+        List<Map<String, Object>> data = new ArrayList<>();
+        for(String it:areaCountMap.keySet()){
+           data.add(createDataItem(it,areaCountMap.get(it)));
+        }
+        return new R(true,200,"地区数据获取成功",data);
+    }
+
+    //2 获取总体成果状态分布数据
+//    @SaCheckLogin
+    @GetMapping("/totalStatusPieData")
+    public R getTotalPieData() {
+        String refuse = "拒绝";
+        String accept = "接收";
+        String audit  = "审核";
+        // 构造饼图数据
+        List<Map<String, Object>> data = new ArrayList<>();
+        System.out.println("personalData is "+data);
+        data.add(createDataItem("拒绝的成果", rewardMapper.getAllStatus(refuse)+scientificPaperMapper.getAllStatus(refuse)+monographMapper.getAllStatus(refuse)+patentSoftMapper.getAllStatus(refuse)+projectMapper.getAllStatus(refuse)));
+        data.add(createDataItem("接受的成果", rewardMapper.getAllStatus(accept)+scientificPaperMapper.getAllStatus(accept)+monographMapper.getAllStatus(accept)+patentSoftMapper.getAllStatus(accept)+projectMapper.getAllStatus(accept)));;
+        data.add(createDataItem("审核的成果", rewardMapper.getAllStatus(audit)+scientificPaperMapper.getAllStatus(audit)+monographMapper.getAllStatus(audit)+patentSoftMapper.getAllStatus(audit)+projectMapper.getAllStatus(audit)));;
+        return new R(true,200,"总体饼图数据",data);
+    }
+
+    @GetMapping("/gradesNumData")
+    public R getGradesNum(){
+        int grade1=0;
+        int grade2=0;
+        int grade3=0;
+        int grade4=0;
+        int gradex=0;//其他 填写班级错误的人
+        List<Student> list=studentMapper.selectList(null);
+        for(Student student:list){//土木2101
+            if(student.getMajor().length()<6){
+                continue;
+            }
+            LocalDate currentDate = LocalDate.now();
+            int year = currentDate.getYear();
+            String t=student.getMajor();
+            String grade=t.substring(t.length()-4);//2101
+            try {
+                int studentGrade=year%100-Integer.parseInt(grade.substring(0,2));
+                if(studentGrade==1){
+                    grade1++;
+                }
+                if(studentGrade==2){
+                    grade2++;
+                }
+                if(studentGrade==3){
+                    grade3++;
+                }
+                if(studentGrade==4){
+                    grade4++;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("该专业名称无法转换为数字");
+            }
+        }
+//        System.out.println("大1 "+grade1);
+//        System.out.println("大2 "+grade2);
+//        System.out.println("大3 "+grade3);
+//        System.out.println("大4 "+grade4);
+//        System.out.println("其他"+(list.size()-(grade1+grade2+grade3+grade4)));
+        gradex=list.size()-(grade1+grade2+grade3+grade4);
+        List<Integer>gradesList=new ArrayList<>();
+        gradesList.add(grade1);
+        gradesList.add(grade2);
+        gradesList.add(grade3);
+        gradesList.add(grade4);
+        gradesList.add(gradex);
+        return new R(true,200,"各个年级人数分布数据",gradesList);
+    }
+
+
+
 
     @Autowired
     private LoginNumRecord loginNumRecord;
