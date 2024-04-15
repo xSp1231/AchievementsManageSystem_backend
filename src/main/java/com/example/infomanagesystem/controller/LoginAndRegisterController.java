@@ -60,7 +60,7 @@ public class LoginAndRegisterController {
                   loginTime.setLoginTime(String.valueOf(localDate));
                   String loginTimes = String.valueOf(localDate);
                   //账号能使用  status==1  进行登录  删除验证码
-                  int num = loginTimeMapper.GetLoginNumber(username);
+                  int num = loginTimeMapper.GetLoginNumber(username,loginTimes);
                   if(num==0){
                       loginTime.setNum("1");
                       loginTimeMapper.insert(loginTime);
