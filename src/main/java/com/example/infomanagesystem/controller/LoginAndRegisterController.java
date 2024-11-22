@@ -80,7 +80,7 @@ public class LoginAndRegisterController {
                   StpUtil.login(username);
                   SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
                   System.out.println("登录成功得到的token 是"+tokenInfo);
-                 // String token=JwtUtils.generateToken(username,role);
+                  // String token=JwtUtils.generateToken(username,role);
                   return new R(true,200,"student",tokenInfo);
               }
               else{

@@ -7,6 +7,7 @@ import com.example.infomanagesystem.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,6 +34,11 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper,Notice> implemen
     }
     @Override
     public List<Notice> getAllNotice() {
-        return noticeMapper.selectList(null); //查询所有
+        List<Notice> noticeList = noticeMapper.selectList(null);
+
+        // 使用Collections.sort按时间字段进行排序
+        noticeList.sort((notice2, notice1) -> notice1.getTime().compareTo(notice2.getTime()));
+
+        return noticeList;
     }
 }

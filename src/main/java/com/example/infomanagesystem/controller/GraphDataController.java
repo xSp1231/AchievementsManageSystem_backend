@@ -188,11 +188,7 @@ public class GraphDataController {
                 System.out.println("该专业名称无法转换为数字");
             }
         }
-//        System.out.println("大1 "+grade1);
-//        System.out.println("大2 "+grade2);
-//        System.out.println("大3 "+grade3);
-//        System.out.println("大4 "+grade4);
-//        System.out.println("其他"+(list.size()-(grade1+grade2+grade3+grade4)));
+
         gradex=list.size()-(grade1+grade2+grade3+grade4);
         List<Integer>gradesList=new ArrayList<>();
         gradesList.add(grade1);

@@ -1,5 +1,6 @@
 package com.example.infomanagesystem.service.impl;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -73,6 +75,9 @@ public class MailService {
             mimeMessageHelper.setText(html,true);//可以发送html邮件
             //邮件发送时间
             mimeMessageHelper.setSentDate(new Date());
+
+
+
 
             //发送邮件
             MailSender.send(mimeMessageHelper.getMimeMessage());
